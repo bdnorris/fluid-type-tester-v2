@@ -7,7 +7,8 @@ export interface State {
   bodySizeMax: number
   headerSizeMin: number,
   headerSizeFluid: number,
-  headerSizeMax: number
+  headerSizeMax: number,
+	headingLevels: number,
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -20,6 +21,7 @@ export const store = createStore<State>({
     headerSizeMin: 24,
     headerSizeFluid: 1.4,
     headerSizeMax: 96,
+		headingLevels: 1,
   },
 	mutations: {
 		setBodySizeMin(state, size) {
@@ -39,6 +41,16 @@ export const store = createStore<State>({
 		},
 		setHeaderSizeMax(state, size) {
 			state.headerSizeMax = size;
+		},
+		addHeadingLevel(state) {
+			if (state.headingLevels < 6) {
+				state.headingLevels++;
+			}
+		},
+		removeHeadingLevel(state) {
+			if (state.headingLevels > 1) {
+				state.headingLevels--;
+			}
 		}
 	},
 })

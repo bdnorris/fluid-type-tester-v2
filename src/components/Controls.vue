@@ -70,11 +70,17 @@
 				/>
 			</div>
 		</fieldset>
+		<button type="button" @click="addHeading" :disabled="headingsMaxed">
+			Add Another Heading Level
+		</button>
+		<button type="button" @click="removeHeading" v-if="headingLevels > 1">
+			Remove a Heading Level
+		</button>
 	</div>
 </template>
 
 <script lang="ts">
-import { ref, watch } from "@vue/runtime-core";
+import { computed, ref, watch } from "@vue/runtime-core";
 import { useStore } from "../../store";
 export default {
 	setup() {
@@ -104,6 +110,14 @@ export default {
 		watch(headerSizeMax, (newVal) => {
 			store.commit("setHeaderSizeMax", newVal);
 		});
+		const addHeading = () => {
+			store.commit("addHeadingLevel");
+		};
+		const removeHeading = () => {
+			store.commit("removeHeadingLevel");
+		};
+		const headingLevels = computed(() => store.state.headingLevels);
+		const headingsMaxed = computed(() => store.state.headingLevels == 6);
 		return {
 			bodySizeMin: bodySizeMin,
 			bodySizeFluid: bodySizeFluid,
@@ -111,6 +125,11 @@ export default {
 			headerSizeMin: headerSizeMin,
 			headerSizeFluid: headerSizeFluid,
 			headerSizeMax: headerSizeMax,
+			headings: computed(() => store.state.headingLevels),
+			addHeading,
+			removeHeading,
+			headingLevels,
+			headingsMaxed
 		};
 	},
 };

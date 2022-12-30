@@ -1,6 +1,11 @@
 <template>
 	<div class="text" :style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px;`" contenteditable="true">
 		<h1>Down the Rabbit-Hole</h1>
+		<h2 v-if="headingCount > 1">Alice's Adventures in Wonderland</h2>
+		<h3 v-if="headingCount > 2">Alice's Adventures in Wonderland</h3>
+		<h4 v-if="headingCount > 3">Alice's Adventures in Wonderland</h4>
+		<h5 v-if="headingCount > 4">Alice's Adventures in Wonderland</h5>
+		<h6 v-if="headingCount > 5">Alice's Adventures in Wonderland</h6>
 		<p>
 			Alice was beginning to get very tired of sitting by her sister on the
 			bank, and of having nothing to do: once or twice she had peeped into the
@@ -80,6 +85,7 @@ export default {
 		const headerSizeMin = computed(() => store.state.headerSizeMin);
 		const headerSizeFluid = computed(() => store.state.headerSizeFluid);
 		const headerSizeMax = computed(() => store.state.headerSizeMax);
+		const headingCount = computed(() => store.state.headingLevels);
 		return {
 			bodySizeMin,
 			bodySizeFluid,
@@ -87,6 +93,7 @@ export default {
 			headerSizeMin,
 			headerSizeFluid,
 			headerSizeMax,
+			headingCount,
 		};
 	},
 };
