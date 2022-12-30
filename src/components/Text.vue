@@ -1,5 +1,5 @@
 <template>
-	<div class="text" :style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px;`">
+	<div class="text" :style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px;`" contenteditable="true">
 		<h1>Down the Rabbit-Hole</h1>
 		<p>
 			Alice was beginning to get very tired of sitting by her sister on the
