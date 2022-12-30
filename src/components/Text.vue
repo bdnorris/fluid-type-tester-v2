@@ -1,6 +1,5 @@
 <template>
-	<div class="text" :style="`--body-size: ${bodySize}px`">
-		{{ bodySize }}
+	<div class="text" :style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px;`">
 		<h1>Down the Rabbit-Hole</h1>
 		<p>
 			Alice was beginning to get very tired of sitting by her sister on the
@@ -10,10 +9,7 @@
 			conversations?”
 		</p>
 		<p>
-			So she was considering in her own mind (as well as she could, for the hot
-			day made her feel very sleepy and stupid), whether the pleasure of making
-			a daisy-chain would be worth the trouble of getting up and picking the
-			daisies, when suddenly a White Rabbit with pink eyes ran close by her.
+			So she was considering in her own mind (as well as she could, for the hot day made her feel very sleepy and stupid), whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly a White Rabbit with pink eyes ran close by her.
 		</p>
 		<p>
 			There was nothing so _very_ remarkable in that; nor did Alice think it so
@@ -78,9 +74,19 @@ import { computed, ref, watch } from "vue";
 export default {
 	setup() {
 		const store = useStore();
-		const bodySize = computed(() => store.state.bodySize);
+		const bodySizeMin = computed(() => store.state.bodySizeMin);
+		const bodySizeFluid = computed(() => store.state.bodySizeFluid);
+		const bodySizeMax = computed(() => store.state.bodySizeMax);
+		const headerSizeMin = computed(() => store.state.headerSizeMin);
+		const headerSizeFluid = computed(() => store.state.headerSizeFluid);
+		const headerSizeMax = computed(() => store.state.headerSizeMax);
 		return {
-			bodySize,
+			bodySizeMin,
+			bodySizeFluid,
+			bodySizeMax,
+			headerSizeMin,
+			headerSizeFluid,
+			headerSizeMax,
 		};
 	},
 };
@@ -91,8 +97,10 @@ export default {
 	max-width: 69ch;
 	padding: 2em;
 }
-			.text p {
-				font-size: var(--body-size);
-			}
-
+.text p {
+	font-size: clamp(var(--body-size-min), calc(1rem + var(--body-size-fluid)), var(--body-size-max));
+}
+.text h1 {
+	font-size: clamp(var(--header-size-min), calc(1rem + var(--header-size-fluid)), var(--header-size-max));
+}
 </style>
