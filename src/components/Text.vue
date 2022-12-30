@@ -3,7 +3,7 @@
 		<select name="articles" id="articles" v-model="selectedArticle">
 			<option v-for="(article, index) in articles" :value="article.key" :key="index">{{ article.key }}</option>
 		</select>
-		<div class="text" :style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px;`" contenteditable="true">
+		<div class="text" :style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px; --header-ratio: ${headerRatio};`" contenteditable="true">
 			<h1>{{ article.mainHeading }}</h1>
 			<h2 v-if="headingCount > 1">Lorem ipsum dolor sit amet</h2>
 			<h3 v-if="headingCount > 2">Consectetur adipiscing elit, sed do</h3>
@@ -32,6 +32,7 @@ export default {
 		const headerSizeFluid = computed(() => store.state.headerSizeFluid);
 		const headerSizeMax = computed(() => store.state.headerSizeMax);
 		const headingCount = computed(() => store.state.headingLevels);
+		const headerRatio = computed(() => store.state.headerRatio);
 		const articles = JSON.parse(JSON.stringify(texts)).texts;
 		// console.log('articles', articles)
 		const selectedArticle = ref(articles[0].key);
@@ -48,6 +49,7 @@ export default {
 			headerSizeFluid,
 			headerSizeMax,
 			headingCount,
+			headerRatio,
 			article,
 			articles,
 			selectedArticle
@@ -66,5 +68,20 @@ export default {
 }
 .text h1 {
 	font-size: clamp(var(--header-size-min), calc(1rem + var(--header-size-fluid)), var(--header-size-max));
+}
+.text h2 {
+	font-size: clamp(calc(var(--header-size-min) / var(--header-ratio)), calc(1rem + calc(var(--header-size-fluid) / var(--header-ratio))), calc(var(--header-size-max) / var(--header-ratio)));
+}
+.text h3 {
+	font-size: clamp(calc(var(--header-size-min) / (var(--header-ratio)*2)), calc(1rem + calc(var(--header-size-fluid) / (var(--header-ratio)*2))), calc(var(--header-size-max) / (var(--header-ratio)*2)));
+}
+.text h4 {
+	font-size: clamp(calc(var(--header-size-min) / (var(--header-ratio)*3)), calc(1rem + calc(var(--header-size-fluid) / (var(--header-ratio)*3))), calc(var(--header-size-max) / (var(--header-ratio)*3)));
+}
+.text h5 {
+	font-size: clamp(calc(var(--header-size-min) / (var(--header-ratio)*4)), calc(1rem + calc(var(--header-size-fluid) / (var(--header-ratio)*4))), calc(var(--header-size-max) / (var(--header-ratio)*4)));
+}
+.text h6 {
+	font-size: clamp(calc(var(--header-size-min) / (var(--header-ratio)*5)), calc(1rem + calc(var(--header-size-fluid) / (var(--header-ratio)*5))), calc(var(--header-size-max) / (var(--header-ratio)*5)));
 }
 </style>

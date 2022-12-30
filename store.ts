@@ -9,6 +9,7 @@ export interface State {
   headerSizeFluid: number,
   headerSizeMax: number,
 	headingLevels: number,
+	headerRatio: number,
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -22,6 +23,7 @@ export const store = createStore<State>({
     headerSizeFluid: 1.4,
     headerSizeMax: 96,
 		headingLevels: 1,
+		headerRatio: 1.4,
   },
 	mutations: {
 		setBodySizeMin(state, size) {
@@ -51,6 +53,9 @@ export const store = createStore<State>({
 			if (state.headingLevels > 1) {
 				state.headingLevels--;
 			}
+		},
+		setHeaderRatio(state, ratio) {
+			state.headerRatio = ratio;
 		}
 	},
 })

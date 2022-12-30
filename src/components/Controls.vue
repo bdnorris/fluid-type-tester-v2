@@ -76,6 +76,21 @@
 		<button type="button" @click="removeHeading" v-if="headingLevels > 1">
 			Remove a Heading Level
 		</button>
+		<fieldset>
+			<legend>Header Ratio</legend>
+			<div class="controls__slider">
+				<label for="headerRatio">Header Ratio</label>
+				<input
+					type="range"
+					min="1"
+					max="4"
+					step="0.01"
+					class="slider"
+					id="headerRatio"
+					v-model="headerRatio"
+				/>
+			</div>
+		</fieldset>
 	</div>
 </template>
 
@@ -92,6 +107,7 @@ export default {
 		const headerSizeMin = ref(store.state.headerSizeMin);
 		const headerSizeFluid = ref(store.state.headerSizeFluid);
 		const headerSizeMax = ref(store.state.headerSizeMax);
+		const headerRatio = ref(store.state.headerRatio);
 		watch(bodySizeMin, (newVal) => {
 			store.commit("setBodySizeMin", newVal);
 		});
@@ -109,6 +125,9 @@ export default {
 		});
 		watch(headerSizeMax, (newVal) => {
 			store.commit("setHeaderSizeMax", newVal);
+		});
+		watch(headerRatio, (newVal) => {
+			store.commit("setHeaderRatio", newVal);
 		});
 		const addHeading = () => {
 			store.commit("addHeadingLevel");
@@ -129,7 +148,8 @@ export default {
 			addHeading,
 			removeHeading,
 			headingLevels,
-			headingsMaxed
+			headingsMaxed,
+			headerRatio,
 		};
 	},
 };
