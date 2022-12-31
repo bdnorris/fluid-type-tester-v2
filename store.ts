@@ -23,7 +23,7 @@ export const store = createStore<State>({
     headerSizeFluid: 1.4,
     headerSizeMax: 96,
 		headingLevels: 1,
-		headerRatio: 1.4,
+		headerRatio: 1.2,
   },
 	mutations: {
 		setBodySizeMin(state, size) {

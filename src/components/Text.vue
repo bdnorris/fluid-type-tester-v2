@@ -1,9 +1,19 @@
 <template>
 	<div>
 		<select name="articles" id="articles" v-model="selectedArticle">
-			<option v-for="(article, index) in articles" :value="article.key" :key="index">{{ article.key }}</option>
+			<option
+				v-for="(article, index) in articles"
+				:value="article.key"
+				:key="index"
+			>
+				{{ article.key }}
+			</option>
 		</select>
-		<div class="text" :style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px; --header-ratio: ${headerRatio};`" contenteditable="true">
+		<div
+			class="text"
+			:style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px; --header-ratio: ${headerRatio}; --h2-size-min: ${h2Size[0]}px; --h2-size-fluid: ${h2Size[1]}vw; --h2-size-max: ${h2Size[2]}px; --h3-size-min: ${h3Size[0]}px; --h3-size-fluid: ${h3Size[1]}vw; --h3-size-max: ${h3Size[2]}px; --h4-size-min: ${h4Size[0]}px; --h4-size-fluid: ${h4Size[1]}vw; --h4-size-max: ${h4Size[2]}px; --h5-size-min: ${h5Size[0]}px; --h5-size-fluid: ${h5Size[1]}vw; --h5-size-max: ${h5Size[2]}px; --h6-size-min: ${h6Size[0]}px; --h6-size-fluid: ${h6Size[1]}vw; --h6-size-max: ${h6Size[2]}px;`"
+			contenteditable="true"
+		>
 			<h1>{{ article.mainHeading }}</h1>
 			<h2 v-if="headingCount > 1">Lorem ipsum dolor sit amet</h2>
 			<h3 v-if="headingCount > 2">Consectetur adipiscing elit, sed do</h3>
@@ -37,6 +47,41 @@ export default {
 		// console.log('articles', articles)
 		const selectedArticle = ref(articles[0].key);
 		const article = ref(articles[0]);
+		const h2Size = computed(() => {
+			return [
+				(headerSizeMin.value / headerRatio.value),
+				(headerSizeFluid.value / headerRatio.value),
+				(headerSizeMax.value / headerRatio.value),
+			];
+		});
+		const h3Size = computed(() => {
+			return [
+				(h2Size.value[0] / headerRatio.value),
+				(h2Size.value[1] / headerRatio.value),
+				(h2Size.value[2] / headerRatio.value),
+			];
+		});
+		const h4Size = computed(() => {
+			return [
+				(h3Size.value[0] / headerRatio.value),
+				(h3Size.value[1] / headerRatio.value),
+				(h3Size.value[2] / headerRatio.value),
+			];
+		});
+		const h5Size = computed(() => {
+			return [
+				(h4Size.value[0] / headerRatio.value),
+				(h4Size.value[1] / headerRatio.value),
+				(h4Size.value[2] / headerRatio.value),
+			];
+		});
+		const h6Size = computed(() => {
+			return [
+				(h5Size.value[0] / headerRatio.value),
+				(h5Size.value[1] / headerRatio.value),
+				(h5Size.value[2] / headerRatio.value),
+			];
+		});
 		watch(selectedArticle, (newVal) => {
 			// console.log('newVal', newVal)
 			article.value = articles.find((article) => article.key === newVal);
@@ -52,7 +97,12 @@ export default {
 			headerRatio,
 			article,
 			articles,
-			selectedArticle
+			selectedArticle,
+			h2Size,
+			h3Size,
+			h4Size,
+			h5Size,
+			h6Size,
 		};
 	},
 };
@@ -64,24 +114,53 @@ export default {
 	padding: 2em;
 }
 .text p {
-	font-size: clamp(var(--body-size-min), calc(1rem + var(--body-size-fluid)), var(--body-size-max));
+	font-size: clamp(
+		var(--body-size-min),
+		calc(1rem + var(--body-size-fluid)),
+		var(--body-size-max)
+	);
 }
 .text h1 {
-	font-size: clamp(var(--header-size-min), calc(1rem + var(--header-size-fluid)), var(--header-size-max));
+	font-size: clamp(
+		var(--header-size-min),
+		calc(1rem + var(--header-size-fluid)),
+		var(--header-size-max)
+	);
 }
 .text h2 {
-	font-size: clamp(calc(var(--header-size-min) / var(--header-ratio)), calc(1rem + calc(var(--header-size-fluid) / var(--header-ratio))), calc(var(--header-size-max) / var(--header-ratio)));
+	font-size: clamp(
+		var(--h2-size-min),
+		calc(1rem + var(--h2-size-fluid)),
+		var(--h2-size-max)
+	);
 }
 .text h3 {
-	font-size: clamp(calc(var(--header-size-min) / (var(--header-ratio)*2)), calc(1rem + calc(var(--header-size-fluid) / (var(--header-ratio)*2))), calc(var(--header-size-max) / (var(--header-ratio)*2)));
+	font-size: clamp(
+		var(--h3-size-min),
+		calc(1rem + var(--h3-size-fluid)),
+		var(--h3-size-max)
+	);
 }
 .text h4 {
-	font-size: clamp(calc(var(--header-size-min) / (var(--header-ratio)*3)), calc(1rem + calc(var(--header-size-fluid) / (var(--header-ratio)*3))), calc(var(--header-size-max) / (var(--header-ratio)*3)));
+	font-size: clamp(
+		var(--h4-size-min),
+		calc(1rem + var(--h4-size-fluid)),
+		var(--h4-size-max)
+	);
 }
 .text h5 {
-	font-size: clamp(calc(var(--header-size-min) / (var(--header-ratio)*4)), calc(1rem + calc(var(--header-size-fluid) / (var(--header-ratio)*4))), calc(var(--header-size-max) / (var(--header-ratio)*4)));
+	font-size: clamp(
+		var(--h5-size-min),
+		calc(1rem + var(--h5-size-fluid)),
+		var(--h5-size-max)
+	);
 }
 .text h6 {
-	font-size: clamp(calc(var(--header-size-min) / (var(--header-ratio)*5)), calc(1rem + calc(var(--header-size-fluid) / (var(--header-ratio)*5))), calc(var(--header-size-max) / (var(--header-ratio)*5)));
+	font-size: clamp(
+		var(--h6-size-min),
+		calc(1rem + var(--h6-size-fluid)),
+		var(--h6-size-max)
+	);
 }
+
 </style>

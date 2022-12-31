@@ -82,9 +82,9 @@
 				<label for="headerRatio">Header Ratio</label>
 				<input
 					type="range"
-					min="1"
-					max="4"
-					step="0.01"
+					min="1.001"
+					max="2"
+					step="0.001"
 					class="slider"
 					id="headerRatio"
 					v-model="headerRatio"
