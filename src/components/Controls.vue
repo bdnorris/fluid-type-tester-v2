@@ -53,6 +53,10 @@
 				<select id="headerFont" value="headerFont" name="headerFont" v-model="selectedHeaderFont">
 					<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
 				</select>
+				<label for="headerCustomFont">
+					Header Custom Font (if not in list above)
+				</label>
+				<input type="text" id="headerCustomFont" v-model="headerCustomFont" />
 			</div>
 		</fieldset>
 		<fieldset>
@@ -191,6 +195,7 @@ export default {
 		const top100Fonts = ref([]);
 		const selectedBodyFont = ref(store.state.bodyFont);
 		const bodyCustomFont = ref('');
+		const headerCustomFont = ref('');
 		const selectedHeaderFontFamily = computed(() => {
 			return top100Fonts.value.find((font) => font.family == selectedHeaderFont.value);
 		});
@@ -214,7 +219,7 @@ export default {
 		})
 		const headerCssUrl = computed(() => {
 			if (!selectedBodyFontFamily.value) return '';
-			if (!bodyCustomFont.value) {
+			if (!headerCustomFont.value) {
 				return `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap`
 			} else {
 				return false;
@@ -226,10 +231,16 @@ export default {
 		})
 		watch(selectedHeaderFont, (newVal) => {
 			store.commit('setHeaderFont', newVal);
+			headerCustomFont.value = '';
 		})
 		watch(bodyCustomFont, (newVal) => {
 			if (newVal) {
 				store.commit('setBodyFont', newVal);
+			}
+		})
+		watch(headerCustomFont, (newVal) => {
+			if (newVal) {
+				store.commit('setHeaderFont', newVal);
 			}
 		})
 		onMounted(() => {
@@ -258,6 +269,7 @@ export default {
 			headingsMaxed,
 			headerRatio,
 			headerLineHeight,
+			headerCustomFont,
 			top100Fonts,
 			selectedBodyFont,
 			selectedHeaderFont,
