@@ -13,6 +13,7 @@
 					id="headerSizeMin"
 					v-model="headerSizeMin"
 				/>
+				{{ headerSizeMin }}px
 				<label for="headerSizeFluid">Header Size Fluid</label>
 				<input
 					type="range"
@@ -23,6 +24,7 @@
 					id="headerSizeFluid"
 					v-model="headerSizeFluid"
 				/>
+				{{ headerSizeFluid }}vw
 				<label for="headerSizeMax">Header Size Maximum</label>
 				<input
 					type="range"
@@ -33,6 +35,18 @@
 					id="headerSizeMax"
 					v-model="headerSizeMax"
 				/>
+				{{ headerSizeMax }}px
+				<label for="headerLineHeight">Header Line Height</label>
+				<input
+					type="range"
+					min="0.1"
+					max="3"
+					step="0.1"
+					class="slider"
+					id="headerLineHeight"
+					v-model="headerLineHeight"
+				/>
+				{{ headerLineHeight }}
 			</div>
 		</fieldset>
 		<fieldset>
@@ -48,6 +62,7 @@
 					id="bodySizeMin"
 					v-model="bodySizeMin"
 				/>
+				{{ bodySizeMin }}px
 				<label for="bodySizeFluid">Body Size Fluid</label>
 				<input
 					type="range"
@@ -58,6 +73,7 @@
 					id="bodySizeFluid"
 					v-model="bodySizeFluid"
 				/>
+				{{ bodySizeFluid }}vw
 				<label for="bodySizeMax">Body Size Maximum</label>
 				<input
 					type="range"
@@ -68,6 +84,18 @@
 					id="bodySizeMax"
 					v-model="bodySizeMax"
 				/>
+				{{ bodySizeMax }}px
+				<label for="bodyLineHeight">Body Line Height</label>
+				<input
+					type="range"
+					min="0.1"
+					max="3"
+					step="0.1"
+					class="slider"
+					id="bodyLineHeight"
+					v-model="bodyLineHeight"
+				/>
+				{{ bodyLineHeight }}
 			</div>
 		</fieldset>
 		<button type="button" @click="addHeading" :disabled="headingsMaxed">
@@ -76,7 +104,7 @@
 		<button type="button" @click="removeHeading" v-if="headingLevels > 1">
 			Remove a Heading Level
 		</button>
-		<fieldset>
+		<fieldset v-if="headingLevels > 1">
 			<legend>Header Ratio</legend>
 			<div class="controls__slider">
 				<label for="headerRatio">Header Ratio</label>
@@ -104,10 +132,12 @@ export default {
 		const bodySizeMin = ref(store.state.bodySizeMin);
 		const bodySizeFluid = ref(store.state.bodySizeFluid);
 		const bodySizeMax = ref(store.state.bodySizeMax);
+		const bodyLineHeight = ref(store.state.bodyLineHeight);
 		const headerSizeMin = ref(store.state.headerSizeMin);
 		const headerSizeFluid = ref(store.state.headerSizeFluid);
 		const headerSizeMax = ref(store.state.headerSizeMax);
 		const headerRatio = ref(store.state.headerRatio);
+		const headerLineHeight = ref(store.state.headerLineHeight);
 		watch(bodySizeMin, (newVal) => {
 			store.commit("setBodySizeMin", newVal);
 		});
@@ -129,6 +159,12 @@ export default {
 		watch(headerRatio, (newVal) => {
 			store.commit("setHeaderRatio", newVal);
 		});
+		watch(headerLineHeight, (newVal) => {
+			store.commit("setHeaderLineHeight", newVal);
+		});
+		watch(bodyLineHeight, (newVal) => {
+			store.commit("setBodyLineHeight", newVal);
+		});
 		const addHeading = () => {
 			store.commit("addHeadingLevel");
 		};
@@ -138,18 +174,20 @@ export default {
 		const headingLevels = computed(() => store.state.headingLevels);
 		const headingsMaxed = computed(() => store.state.headingLevels == 6);
 		return {
-			bodySizeMin: bodySizeMin,
-			bodySizeFluid: bodySizeFluid,
-			bodySizeMax: bodySizeMax,
-			headerSizeMin: headerSizeMin,
-			headerSizeFluid: headerSizeFluid,
-			headerSizeMax: headerSizeMax,
+			bodySizeMin,
+			bodySizeFluid,
+			bodySizeMax,
+			bodyLineHeight,
+			headerSizeMin,
+			headerSizeFluid,
+			headerSizeMax,
 			headings: computed(() => store.state.headingLevels),
 			addHeading,
 			removeHeading,
 			headingLevels,
 			headingsMaxed,
 			headerRatio,
+			headerLineHeight,
 		};
 	},
 };

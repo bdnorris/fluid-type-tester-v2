@@ -4,12 +4,14 @@ import { createStore, useStore as baseUseStore, Store } from 'vuex'
 export interface State {
   bodySizeMin: number,
   bodySizeFluid: number,
-  bodySizeMax: number
+  bodySizeMax: number,
+	bodyLineHeight: number,
   headerSizeMin: number,
   headerSizeFluid: number,
   headerSizeMax: number,
 	headingLevels: number,
 	headerRatio: number,
+	headerLineHeight: number,
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -19,11 +21,13 @@ export const store = createStore<State>({
     bodySizeMin: 16,
     bodySizeFluid: 1,
     bodySizeMax: 20,
+		bodyLineHeight: 1.5,
     headerSizeMin: 24,
     headerSizeFluid: 1.4,
     headerSizeMax: 96,
 		headingLevels: 1,
 		headerRatio: 1.2,
+		headerLineHeight: 1.2,
   },
 	mutations: {
 		setBodySizeMin(state, size) {
@@ -34,6 +38,9 @@ export const store = createStore<State>({
 		},
 		setBodySizeMax(state, size) {
 			state.bodySizeMax = size;
+		},
+		setBodyLineHeight(state, lineHeight) {
+			state.bodyLineHeight = lineHeight;
 		},
 		setHeaderSizeMin(state, size) {
 			state.headerSizeMin = size;
@@ -56,6 +63,9 @@ export const store = createStore<State>({
 		},
 		setHeaderRatio(state, ratio) {
 			state.headerRatio = ratio;
+		},
+		setHeaderLineHeight(state, lineHeight) {
+			state.headerLineHeight = lineHeight;
 		}
 	},
 })

@@ -11,7 +11,7 @@
 		</select>
 		<div
 			class="text"
-			:style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px; --header-ratio: ${headerRatio}; --h2-size-min: ${h2Size[0]}px; --h2-size-fluid: ${h2Size[1]}vw; --h2-size-max: ${h2Size[2]}px; --h3-size-min: ${h3Size[0]}px; --h3-size-fluid: ${h3Size[1]}vw; --h3-size-max: ${h3Size[2]}px; --h4-size-min: ${h4Size[0]}px; --h4-size-fluid: ${h4Size[1]}vw; --h4-size-max: ${h4Size[2]}px; --h5-size-min: ${h5Size[0]}px; --h5-size-fluid: ${h5Size[1]}vw; --h5-size-max: ${h5Size[2]}px; --h6-size-min: ${h6Size[0]}px; --h6-size-fluid: ${h6Size[1]}vw; --h6-size-max: ${h6Size[2]}px;`"
+			:style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --body-line-height: ${bodyLineHeight}; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px; --header-ratio: ${headerRatio}; --h2-size-min: ${h2Size[0]}px; --h2-size-fluid: ${h2Size[1]}vw; --h2-size-max: ${h2Size[2]}px; --h3-size-min: ${h3Size[0]}px; --h3-size-fluid: ${h3Size[1]}vw; --h3-size-max: ${h3Size[2]}px; --h4-size-min: ${h4Size[0]}px; --h4-size-fluid: ${h4Size[1]}vw; --h4-size-max: ${h4Size[2]}px; --h5-size-min: ${h5Size[0]}px; --h5-size-fluid: ${h5Size[1]}vw; --h5-size-max: ${h5Size[2]}px; --h6-size-min: ${h6Size[0]}px; --h6-size-fluid: ${h6Size[1]}vw; --h6-size-max: ${h6Size[2]}px; --header-line-height: ${headerLineHeight}`"
 			contenteditable="true"
 		>
 			<h1>{{ article.mainHeading }}</h1>
@@ -38,11 +38,13 @@ export default {
 		const bodySizeMin = computed(() => store.state.bodySizeMin);
 		const bodySizeFluid = computed(() => store.state.bodySizeFluid);
 		const bodySizeMax = computed(() => store.state.bodySizeMax);
+		const bodyLineHeight = computed(() => store.state.bodyLineHeight);
 		const headerSizeMin = computed(() => store.state.headerSizeMin);
 		const headerSizeFluid = computed(() => store.state.headerSizeFluid);
 		const headerSizeMax = computed(() => store.state.headerSizeMax);
 		const headingCount = computed(() => store.state.headingLevels);
 		const headerRatio = computed(() => store.state.headerRatio);
+		const headerLineHeight = computed(() => store.state.headerLineHeight);
 		const articles = JSON.parse(JSON.stringify(texts)).texts;
 		// console.log('articles', articles)
 		const selectedArticle = ref(articles[0].key);
@@ -90,6 +92,7 @@ export default {
 			bodySizeMin,
 			bodySizeFluid,
 			bodySizeMax,
+			bodyLineHeight,
 			headerSizeMin,
 			headerSizeFluid,
 			headerSizeMax,
@@ -103,6 +106,7 @@ export default {
 			h4Size,
 			h5Size,
 			h6Size,
+			headerLineHeight,
 		};
 	},
 };
@@ -112,6 +116,10 @@ export default {
 .text {
 	max-width: 69ch;
 	padding: 2em;
+	line-height: var(--body-line-height);
+}
+.text h1, .text h2, .text h3, .text h4, .text h5, .text h6 {
+	line-height: var(--header-line-height);
 }
 .text p {
 	font-size: clamp(
