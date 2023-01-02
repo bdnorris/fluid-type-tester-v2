@@ -6,11 +6,13 @@ export interface State {
   bodySizeFluid: number,
   bodySizeMax: number,
 	bodyLineHeight: number,
+	bodyFont: string,
   headerSizeMin: number,
   headerSizeFluid: number,
   headerSizeMax: number,
 	headingLevels: number,
 	headerRatio: number,
+	headerFont: string,
 	headerLineHeight: number,
 }
 
@@ -28,6 +30,8 @@ export const store = createStore<State>({
 		headingLevels: 1,
 		headerRatio: 1.2,
 		headerLineHeight: 1.2,
+		bodyFont: 'Roboto',
+		headerFont: 'Roboto'
   },
 	mutations: {
 		setBodySizeMin(state, size) {
@@ -66,6 +70,12 @@ export const store = createStore<State>({
 		},
 		setHeaderLineHeight(state, lineHeight) {
 			state.headerLineHeight = lineHeight;
+		},
+		setBodyFont(state, font) {
+			state.bodyFont = font;
+		},
+		setHeaderFont(state, font) {
+			state.headerFont = font;
 		}
 	},
 })

@@ -1,5 +1,7 @@
 <template>
 	<div class="controls">
+		<link v-if="bodyCssUrl" :href="bodyCssUrl" rel="stylesheet" />
+		<link v-if="headerCssUrl" :href="headerCssUrl" rel="stylesheet" />
 		<fieldset>
 			<legend>Header Text</legend>
 			<div class="controls__slider">
@@ -47,6 +49,10 @@
 					v-model="headerLineHeight"
 				/>
 				{{ headerLineHeight }}
+				<label for="headerFont">Header Font: </label>
+				<select id="headerFont" value="headerFont" name="headerFont" v-model="selectedHeaderFont">
+					<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
+				</select>
 			</div>
 		</fieldset>
 		<fieldset>
@@ -96,6 +102,10 @@
 					v-model="bodyLineHeight"
 				/>
 				{{ bodyLineHeight }}
+				<label for="bodyFont">Body Font: </label>
+				<select id="bodyFont" value="bodyFont" name="bodyFont" v-model="selectedBodyFont">
+					<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
+				</select>
 			</div>
 		</fieldset>
 		<button type="button" @click="addHeading" :disabled="headingsMaxed">
@@ -123,7 +133,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, watch } from "@vue/runtime-core";
+import { computed, onMounted, ref, watch } from "@vue/runtime-core";
 import { useStore } from "../../store";
 export default {
 	setup() {
@@ -173,6 +183,40 @@ export default {
 		};
 		const headingLevels = computed(() => store.state.headingLevels);
 		const headingsMaxed = computed(() => store.state.headingLevels == 6);
+		const gfApiKey = computed(() => import.meta.env.VITE_GF_API_KEY);
+		const top100Fonts = ref([]);
+		const selectedBodyFont = ref(store.state.bodyFont);
+		const selectedHeaderFontFamily = computed(() => {
+			return top100Fonts.value.find((font) => font.family == selectedHeaderFont.value);
+		});
+		const selectedHeaderFont = ref(store.state.headerFont);
+		const selectedBodyFontFamily = computed(() => {
+			return top100Fonts.value.find((font) => font.family == selectedBodyFont.value);
+		});
+		const bodyCssUrl = computed(() => {
+			if (!selectedBodyFontFamily.value) return '';
+			return `https://fonts.googleapis.com/css2?family=${selectedBodyFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap`
+		})
+		const headerCssUrl = computed(() => {
+			if (!selectedBodyFontFamily.value) return '';
+			return `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap`
+		})
+		watch(selectedBodyFont, (newVal) => {
+			store.commit('setBodyFont', newVal);
+		})
+		watch(selectedHeaderFont, (newVal) => {
+			store.commit('setHeaderFont', newVal);
+		})
+		onMounted(() => {
+			fetch(
+				`https://www.googleapis.com/webfonts/v1/webfonts?key=${gfApiKey.value}&sort=popularity`
+			)
+				.then((response) => response.json())
+				.then((data) => {
+					top100Fonts.value = data.items.slice(0, 100);
+					console.log('fonts', top100Fonts.value)
+				});
+		});
 		return {
 			bodySizeMin,
 			bodySizeFluid,
@@ -188,6 +232,13 @@ export default {
 			headingsMaxed,
 			headerRatio,
 			headerLineHeight,
+			top100Fonts,
+			selectedBodyFont,
+			selectedHeaderFont,
+			selectedBodyFontFamily,
+			selectedHeaderFontFamily,
+			bodyCssUrl,
+			headerCssUrl,
 		};
 	},
 };
