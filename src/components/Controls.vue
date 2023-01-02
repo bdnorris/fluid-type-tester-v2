@@ -106,6 +106,10 @@
 				<select id="bodyFont" value="bodyFont" name="bodyFont" v-model="selectedBodyFont">
 					<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
 				</select>
+				<label for="bodyCustomFont">
+					Body Custom Font (if not in list above)
+				</label>
+				<input type="text" id="bodyCustomFont" v-model="bodyCustomFont" />
 			</div>
 		</fieldset>
 		<button type="button" @click="addHeading" :disabled="headingsMaxed">
@@ -186,26 +190,47 @@ export default {
 		const gfApiKey = computed(() => import.meta.env.VITE_GF_API_KEY);
 		const top100Fonts = ref([]);
 		const selectedBodyFont = ref(store.state.bodyFont);
+		const bodyCustomFont = ref('');
 		const selectedHeaderFontFamily = computed(() => {
 			return top100Fonts.value.find((font) => font.family == selectedHeaderFont.value);
 		});
 		const selectedHeaderFont = ref(store.state.headerFont);
 		const selectedBodyFontFamily = computed(() => {
-			return top100Fonts.value.find((font) => font.family == selectedBodyFont.value);
+			if (bodyCustomFont.value) {
+				return {
+					family: bodyCustomFont.value,
+				}
+			} else {
+				return top100Fonts.value.find((font) => font.family == selectedBodyFont.value);
+			}
 		});
 		const bodyCssUrl = computed(() => {
 			if (!selectedBodyFontFamily.value) return '';
-			return `https://fonts.googleapis.com/css2?family=${selectedBodyFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap`
+			if (!bodyCustomFont.value) {
+				return `https://fonts.googleapis.com/css2?family=${selectedBodyFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap`
+			} else {
+				return false;
+			}
 		})
 		const headerCssUrl = computed(() => {
 			if (!selectedBodyFontFamily.value) return '';
-			return `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap`
+			if (!bodyCustomFont.value) {
+				return `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap`
+			} else {
+				return false;
+			}
 		})
 		watch(selectedBodyFont, (newVal) => {
 			store.commit('setBodyFont', newVal);
+			bodyCustomFont.value = '';
 		})
 		watch(selectedHeaderFont, (newVal) => {
 			store.commit('setHeaderFont', newVal);
+		})
+		watch(bodyCustomFont, (newVal) => {
+			if (newVal) {
+				store.commit('setBodyFont', newVal);
+			}
 		})
 		onMounted(() => {
 			fetch(
@@ -222,6 +247,7 @@ export default {
 			bodySizeFluid,
 			bodySizeMax,
 			bodyLineHeight,
+			bodyCustomFont,
 			headerSizeMin,
 			headerSizeFluid,
 			headerSizeMax,
