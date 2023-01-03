@@ -90,27 +90,27 @@ export const store = createStore<State>({
 			];
 			} else if (level === 'h3') {
 			sizes = [
-				(state.headerSizeMin / (state.headerRatio * state.headerRatio)),
-				(state.headerSizeFluid / (state.headerRatio * state.headerRatio)),
-				(state.headerSizeMax / (state.headerRatio * state.headerRatio)),
+				(state.headerSizeMin / Math.pow(state.headerRatio, 2)),
+				(state.headerSizeFluid / Math.pow(state.headerRatio, 2)),
+				(state.headerSizeMax / Math.pow(state.headerRatio, 2)),
 			];
 			} else if (level === 'h4') {
 			sizes = [
-				(state.headerSizeMin / (state.headerRatio * state.headerRatio * state.headerRatio)),
-				(state.headerSizeFluid / (state.headerRatio * state.headerRatio * state.headerRatio)),
-				(state.headerSizeMax / (state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeMin / Math.pow(state.headerRatio, 3)),
+				(state.headerSizeFluid / Math.pow(state.headerRatio, 3)),
+				(state.headerSizeMax / Math.pow(state.headerRatio, 3)),
 			];
 			} else if (level === 'h5') {
 			sizes = [
-				(state.headerSizeMin / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
-				(state.headerSizeFluid / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
-				(state.headerSizeMax / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeMin / Math.pow(state.headerRatio, 4)),
+				(state.headerSizeFluid / Math.pow(state.headerRatio, 4)),
+				(state.headerSizeMax / Math.pow(state.headerRatio, 4)),
 			];
 			} else if (level === 'h6') {
 			sizes = [
-				(state.headerSizeMin / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
-				(state.headerSizeFluid / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
-				(state.headerSizeMax / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeMin / Math.pow(state.headerRatio, 5)),
+				(state.headerSizeFluid / Math.pow(state.headerRatio, 5)),
+				(state.headerSizeMax / Math.pow(state.headerRatio, 5)),
 			];
 			}
 			let rounded = sizes.map((size, index) => {
