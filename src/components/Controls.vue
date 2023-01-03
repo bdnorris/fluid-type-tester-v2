@@ -2,141 +2,144 @@
 	<div class="controls">
 		<link v-if="bodyCssUrl" :href="bodyCssUrl" rel="stylesheet" />
 		<link v-if="headerCssUrl" :href="headerCssUrl" rel="stylesheet" />
-		<fieldset>
-			<legend>Header Text</legend>
-			<div class="controls__slider">
-				<label for="headerSizeMin">Header Size Minimum</label>
-				<input
-					type="range"
-					min="1"
-					max="100"
-					step="1"
-					class="slider"
-					id="headerSizeMin"
-					v-model="headerSizeMin"
-				/>
-				{{ headerSizeMin }}px
-				<label for="headerSizeFluid">Header Size Fluid</label>
-				<input
-					type="range"
-					min="1"
-					max="20"
-					step="0.1"
-					class="slider"
-					id="headerSizeFluid"
-					v-model="headerSizeFluid"
-				/>
-				{{ headerSizeFluid }}vw
-				<label for="headerSizeMax">Header Size Maximum</label>
-				<input
-					type="range"
-					min="1"
-					max="100"
-					step="1"
-					class="slider"
-					id="headerSizeMax"
-					v-model="headerSizeMax"
-				/>
-				{{ headerSizeMax }}px
-				<label for="headerLineHeight">Header Line Height</label>
-				<input
-					type="range"
-					min="0.1"
-					max="3"
-					step="0.1"
-					class="slider"
-					id="headerLineHeight"
-					v-model="headerLineHeight"
-				/>
-				{{ headerLineHeight }}
-				<label for="headerFont">Header Font: </label>
-				<select id="headerFont" value="headerFont" name="headerFont" v-model="selectedHeaderFont">
-					<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
-				</select>
-				<label for="headerCustomFont">
-					Header Custom Font (if not in list above)
-				</label>
-				<input type="text" id="headerCustomFont" v-model="headerCustomFont" />
-			</div>
-		</fieldset>
-		<fieldset>
-			<legend>Body Text</legend>
-			<div class="controls__slider">
-				<label for="bodySizeMin">Body Size Minimum</label>
-				<input
-					type="range"
-					min="1"
-					max="100"
-					step="1"
-					class="slider"
-					id="bodySizeMin"
-					v-model="bodySizeMin"
-				/>
-				{{ bodySizeMin }}px
-				<label for="bodySizeFluid">Body Size Fluid</label>
-				<input
-					type="range"
-					min="1"
-					max="20"
-					step="0.1"
-					class="slider"
-					id="bodySizeFluid"
-					v-model="bodySizeFluid"
-				/>
-				{{ bodySizeFluid }}vw
-				<label for="bodySizeMax">Body Size Maximum</label>
-				<input
-					type="range"
-					min="1"
-					max="100"
-					step="1"
-					class="slider"
-					id="bodySizeMax"
-					v-model="bodySizeMax"
-				/>
-				{{ bodySizeMax }}px
-				<label for="bodyLineHeight">Body Line Height</label>
-				<input
-					type="range"
-					min="0.1"
-					max="3"
-					step="0.1"
-					class="slider"
-					id="bodyLineHeight"
-					v-model="bodyLineHeight"
-				/>
-				{{ bodyLineHeight }}
-				<label for="bodyFont">Body Font: </label>
-				<select id="bodyFont" value="bodyFont" name="bodyFont" v-model="selectedBodyFont">
-					<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
-				</select>
-				<label for="bodyCustomFont">
-					Body Custom Font (if not in list above)
-				</label>
-				<input type="text" id="bodyCustomFont" v-model="bodyCustomFont" />
-			</div>
-		</fieldset>
-		<button type="button" @click="addHeading" :disabled="headingsMaxed">
-			Add Another Heading Level
-		</button>
-		<button type="button" @click="removeHeading" v-if="headingLevels > 1">
-			Remove a Heading Level
-		</button>
-		<fieldset v-if="headingLevels > 1">
-			<legend>Header Ratio</legend>
-			<div class="controls__slider">
-				<label for="headerRatio">Header Ratio</label>
-				<input
-					type="range"
-					min="1.001"
-					max="2"
-					step="0.001"
-					class="slider"
-					id="headerRatio"
-					v-model="headerRatio"
-				/>
-			</div>
-		</fieldset>
+		<div :class="{ 'controls__panel': true, 'controls__panel--open': controlsVisible }" aria-expanded="true">
+			<button type="button" class="controls__toggle" @click="toggleControls">Controls <span v-if="controlsVisible">&times;</span><span v-else>+</span></button>
+			<fieldset>
+				<legend>Header Text</legend>
+				<div class="controls__slider">
+					<label for="headerSizeMin">Header Size Minimum</label>
+					<input
+						type="range"
+						min="1"
+						max="100"
+						step="1"
+						class="slider"
+						id="headerSizeMin"
+						v-model="headerSizeMin"
+					/>
+					{{ headerSizeMin }}px
+					<label for="headerSizeFluid">Header Size Fluid</label>
+					<input
+						type="range"
+						min="1"
+						max="20"
+						step="0.1"
+						class="slider"
+						id="headerSizeFluid"
+						v-model="headerSizeFluid"
+					/>
+					{{ headerSizeFluid }}vw
+					<label for="headerSizeMax">Header Size Maximum</label>
+					<input
+						type="range"
+						min="1"
+						max="100"
+						step="1"
+						class="slider"
+						id="headerSizeMax"
+						v-model="headerSizeMax"
+					/>
+					{{ headerSizeMax }}px
+					<label for="headerLineHeight">Header Line Height</label>
+					<input
+						type="range"
+						min="0.1"
+						max="3"
+						step="0.1"
+						class="slider"
+						id="headerLineHeight"
+						v-model="headerLineHeight"
+					/>
+					{{ headerLineHeight }}
+					<label for="headerFont">Header Font: </label>
+					<select id="headerFont" value="headerFont" name="headerFont" v-model="selectedHeaderFont">
+						<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
+					</select>
+					<label for="headerCustomFont">
+						Header Custom Font (if not in list above)
+					</label>
+					<input type="text" id="headerCustomFont" v-model="headerCustomFont" />
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>Body Text</legend>
+				<div class="controls__slider">
+					<label for="bodySizeMin">Body Size Minimum</label>
+					<input
+						type="range"
+						min="1"
+						max="100"
+						step="1"
+						class="slider"
+						id="bodySizeMin"
+						v-model="bodySizeMin"
+					/>
+					{{ bodySizeMin }}px
+					<label for="bodySizeFluid">Body Size Fluid</label>
+					<input
+						type="range"
+						min="1"
+						max="20"
+						step="0.1"
+						class="slider"
+						id="bodySizeFluid"
+						v-model="bodySizeFluid"
+					/>
+					{{ bodySizeFluid }}vw
+					<label for="bodySizeMax">Body Size Maximum</label>
+					<input
+						type="range"
+						min="1"
+						max="100"
+						step="1"
+						class="slider"
+						id="bodySizeMax"
+						v-model="bodySizeMax"
+					/>
+					{{ bodySizeMax }}px
+					<label for="bodyLineHeight">Body Line Height</label>
+					<input
+						type="range"
+						min="0.1"
+						max="3"
+						step="0.1"
+						class="slider"
+						id="bodyLineHeight"
+						v-model="bodyLineHeight"
+					/>
+					{{ bodyLineHeight }}
+					<label for="bodyFont">Body Font: </label>
+					<select id="bodyFont" value="bodyFont" name="bodyFont" v-model="selectedBodyFont">
+						<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
+					</select>
+					<label for="bodyCustomFont">
+						Body Custom Font (if not in list above)
+					</label>
+					<input type="text" id="bodyCustomFont" v-model="bodyCustomFont" />
+				</div>
+			</fieldset>
+			<button type="button" @click="addHeading" :disabled="headingsMaxed">
+				Add Another Heading Level
+			</button>
+			<button type="button" @click="removeHeading" v-if="headingLevels > 1">
+				Remove a Heading Level
+			</button>
+			<fieldset v-if="headingLevels > 1">
+				<legend>Header Ratio</legend>
+				<div class="controls__slider">
+					<label for="headerRatio">Header Ratio</label>
+					<input
+						type="range"
+						min="1.001"
+						max="2"
+						step="0.001"
+						class="slider"
+						id="headerRatio"
+						v-model="headerRatio"
+					/>
+				</div>
+			</fieldset>
+		</div>
 	</div>
 </template>
 
@@ -253,6 +256,10 @@ export default {
 					console.log('fonts', top100Fonts.value)
 				});
 		});
+		const controlsVisible = ref(true);
+		const toggleControls = () => {
+			controlsVisible.value = !controlsVisible.value;
+		};
 		return {
 			bodySizeMin,
 			bodySizeFluid,
@@ -277,6 +284,8 @@ export default {
 			selectedHeaderFontFamily,
 			bodyCssUrl,
 			headerCssUrl,
+			controlsVisible,
+			toggleControls,
 		};
 	},
 };
@@ -284,11 +293,39 @@ export default {
 
 <style>
 .controls {
-	display: flex;
-	flex-direction: column;
 }
 .controls__slider {
 	display: flex;
 	flex-direction: column;
+}
+.controls__panel {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	padding: 1em;
+	transform: translateX(-90%);
+	transition: transform 0.3s ease-in-out;
+	border-right: 1px solid white;
+	height: 100%;
+}
+.controls__panel--open {
+	/* position: relative; */
+	transform: translateX(0);
+}
+.controls__toggle {
+	position: fixed;
+	top: 6em;
+	right: -7em;
+	height: 4em;
+	padding: 1em;
+	transform: rotate(90deg);
+	border: 1px solid white;
+	border-bottom: 0;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+	/* box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2); */
+}
+.controls__toggle span {
+	font-size: 1.5em;	
 }
 </style>

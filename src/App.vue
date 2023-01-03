@@ -5,6 +5,7 @@
       <CSS />
       <Text />
     </div>
+    <div></div>
   </main>
 </template>
 
@@ -27,6 +28,8 @@ export default {
 
 <style scoped>
 main {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  gap: 2em;
 }
 </style>

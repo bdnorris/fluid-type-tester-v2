@@ -119,7 +119,7 @@ export default {
 <style>
 .text {
 	max-width: 69ch;
-	padding: 2em;
+	/* padding: 2em; */
 	line-height: var(--body-line-height);
 	font-family: var(--body-font);
 }
