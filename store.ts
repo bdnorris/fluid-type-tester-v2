@@ -78,6 +78,47 @@ export const store = createStore<State>({
 			state.headerFont = font;
 		}
 	},
+	getters: {
+		headingSize: (state) => (level: string) => {
+			// console.log('headingSize', level)
+			let sizes = [];
+			if (level === 'h2') {
+			sizes = [
+				(state.headerSizeMin / state.headerRatio),
+				(state.headerSizeFluid / state.headerRatio),
+				(state.headerSizeMax / state.headerRatio),
+			];
+			} else if (level === 'h3') {
+			sizes = [
+				(state.headerSizeMin / (state.headerRatio * state.headerRatio)),
+				(state.headerSizeFluid / (state.headerRatio * state.headerRatio)),
+				(state.headerSizeMax / (state.headerRatio * state.headerRatio)),
+			];
+			} else if (level === 'h4') {
+			sizes = [
+				(state.headerSizeMin / (state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeFluid / (state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeMax / (state.headerRatio * state.headerRatio * state.headerRatio)),
+			];
+			} else if (level === 'h5') {
+			sizes = [
+				(state.headerSizeMin / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeFluid / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeMax / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
+			];
+			} else if (level === 'h6') {
+			sizes = [
+				(state.headerSizeMin / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeFluid / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
+				(state.headerSizeMax / (state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio * state.headerRatio)),
+			];
+			}
+			let rounded = sizes.map((size, index) => {
+				return Math.round((size + Number.EPSILON) * 1000) / 1000;
+			});
+			return rounded;
+		},
+	}
 })
 
 // define your own `useStore` composition function

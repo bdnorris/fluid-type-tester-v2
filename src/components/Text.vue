@@ -51,41 +51,6 @@ export default {
 		// console.log('articles', articles)
 		const selectedArticle = ref(articles[0].key);
 		const article = ref(articles[0]);
-		const h2Size = computed(() => {
-			return [
-				(headerSizeMin.value / headerRatio.value),
-				(headerSizeFluid.value / headerRatio.value),
-				(headerSizeMax.value / headerRatio.value),
-			];
-		});
-		const h3Size = computed(() => {
-			return [
-				(h2Size.value[0] / headerRatio.value),
-				(h2Size.value[1] / headerRatio.value),
-				(h2Size.value[2] / headerRatio.value),
-			];
-		});
-		const h4Size = computed(() => {
-			return [
-				(h3Size.value[0] / headerRatio.value),
-				(h3Size.value[1] / headerRatio.value),
-				(h3Size.value[2] / headerRatio.value),
-			];
-		});
-		const h5Size = computed(() => {
-			return [
-				(h4Size.value[0] / headerRatio.value),
-				(h4Size.value[1] / headerRatio.value),
-				(h4Size.value[2] / headerRatio.value),
-			];
-		});
-		const h6Size = computed(() => {
-			return [
-				(h5Size.value[0] / headerRatio.value),
-				(h5Size.value[1] / headerRatio.value),
-				(h5Size.value[2] / headerRatio.value),
-			];
-		});
 		watch(selectedArticle, (newVal) => {
 			// console.log('newVal', newVal)
 			article.value = articles.find((article) => article.key === newVal);
@@ -105,11 +70,11 @@ export default {
 			article,
 			articles,
 			selectedArticle,
-			h2Size,
-			h3Size,
-			h4Size,
-			h5Size,
-			h6Size,
+			h2Size: computed(() => store.getters.headingSize('h2')),
+			h3Size: computed(() => store.getters.headingSize('h3')),
+			h4Size: computed(() => store.getters.headingSize('h4')),
+			h5Size: computed(() => store.getters.headingSize('h5')),
+			h6Size: computed(() => store.getters.headingSize('h6')),
 			headerLineHeight,
 			contentEditable: ref(false),
 		};
