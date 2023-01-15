@@ -88,6 +88,7 @@ export default {
 	/* padding: 2em; */
 	line-height: var(--body-line-height);
 	font-family: var(--body-font);
+	padding-top: 6em;
 }
 .text h1, .text h2, .text h3, .text h4, .text h5, .text h6 {
 	line-height: var(--header-line-height);

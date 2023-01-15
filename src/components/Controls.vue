@@ -3,7 +3,7 @@
 		<link v-if="bodyCssUrl" :href="bodyCssUrl" rel="stylesheet" />
 		<link v-if="headerCssUrl" :href="headerCssUrl" rel="stylesheet" />
 		<div :class="{ 'controls__panel': true, 'controls__panel--open': controlsVisible }" aria-expanded="true">
-			<button type="button" class="controls__toggle" @click="toggleControls">Controls <span v-if="controlsVisible">&times;</span><span v-else>+</span></button>
+			<button type="button" class="toggle controls__toggle" @click="toggleControls">Controls <span v-if="controlsVisible">&times;</span><span v-else>+</span></button>
 			<fieldset>
 				<legend>Header Text</legend>
 				<div class="controls__slider">
@@ -256,7 +256,7 @@ export default {
 					console.log('fonts', top100Fonts.value)
 				});
 		});
-		const controlsVisible = ref(true);
+		const controlsVisible = ref(false);
 		const toggleControls = () => {
 			controlsVisible.value = !controlsVisible.value;
 		};
@@ -299,6 +299,7 @@ export default {
 	flex-direction: column;
 }
 .controls__panel {
+	background-color: var(--color-lapis);
 	display: flex;
 	flex-direction: column;
 	position: relative;
@@ -315,17 +316,17 @@ export default {
 .controls__toggle {
 	position: fixed;
 	top: 6em;
-	right: -7em;
-	height: 4em;
-	padding: 1em;
+	right: calc(-7em + 2px);
+	height: 3em;
 	transform: rotate(90deg);
-	border: 1px solid white;
 	border-bottom: 0;
-	text-transform: uppercase;
-	letter-spacing: 0.2em;
+	border-radius: 0.333em 0.333em 0 0;
+	padding: 0 1em;
 	/* box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2); */
 }
 .controls__toggle span {
 	font-size: 1.5em;	
+	position: relative;
+	top: 0.125em;
 }
 </style>

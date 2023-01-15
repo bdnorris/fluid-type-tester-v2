@@ -1,6 +1,7 @@
 <template>
-	<div class="code-wrap">
-		<div class="code">
+	<div class="code-wrap__wrapper">
+		<div :class="{ 'code-wrap': true, 'code-wrap--visible': codeWrapVisible }">
+			<div class="code">
 			<h2>Headline</h2>
 <pre>
 h1 {
@@ -47,16 +48,19 @@ p {
 	line-height: {{ bodyLineHeight }};
 }
 			</pre>
+			</div>
+			<button type="button" @click="toggleCodeWrap" class="toggle code-wrap--toggle">CSS <span>&times;</span></button>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { computed } from '@vue/runtime-core';
+import { computed, ref } from '@vue/runtime-core';
 import { useStore } from "../../store";
 export default {
 	setup() {
 		const store = useStore();
+		const codeWrapVisible = ref(false);
 		return {
 			bodySizeMin: computed(() => store.state.bodySizeMin),
 			bodySizeFluid: computed(() => store.state.bodySizeFluid),
@@ -72,10 +76,40 @@ export default {
 			h4Size: computed(() => store.getters.headingSize('h4')),
 			h5Size: computed(() => store.getters.headingSize('h5')),
 			h6Size: computed(() => store.getters.headingSize('h6')),
+			codeWrapVisible,
+			toggleCodeWrap() {
+				codeWrapVisible.value = !codeWrapVisible.value;
+			}
 		}
 	}
 };
 </script>
 
 <style>
+.code-wrap__wrapper {
+	position: fixed;
+	top: 0;
+}
+.code-wrap {
+	transform: translateY(-90%);
+	transition: transform 0.3s ease-in-out;
+	position: relative;
+	border: 1px solid var(--color-white);
+	border-top: 0;
+	background-color: var(--color-lapis);
+	padding: 1em;
+}
+.code-wrap--visible {
+	transform: translateY(0);
+}
+.code-wrap--toggle {
+	position: absolute;
+	bottom: calc(-3em + 2px);
+	left: 3em;
+	padding: 0 1em;
+	height: 3em;
+	border-top: 0;
+	border-radius: 0 0 0.333em 0.333em;
+
+}
 </style>
