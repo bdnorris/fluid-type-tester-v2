@@ -50,7 +50,7 @@ pre {
 	text-transform: uppercase;
 	letter-spacing: 0.2em;
 	line-height: 1;
-	background-color: var(--color-lapis);
+	/* background-color: var(--color-lapis); */
 }
 
 
@@ -64,5 +64,29 @@ pre {
   }
   button {
     background-color: var(--color-munsel);
+  }
+  .controls__panel {
+    background-color: var(--color-alice);
+  }
+  .toggle {
+    background-color: var(--color-alice);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: var(--color-white);
+    background-color: var(--color-gunmetal);
+  }
+  a:hover {
+    color: var(--color-munsel);
+  }
+  button {
+    background-color: var(--color-munsel);
+  }
+  .controls__panel {
+    background-color: var(--color-gunmetal);
+  }
+  .toggle {
+    background-color: var(--color-gunmetal);
   }
 }

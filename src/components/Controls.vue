@@ -299,7 +299,7 @@ export default {
 	flex-direction: column;
 }
 .controls__panel {
-	background-color: var(--color-lapis);
+	/* background-color: var(--color-lapis); */
 	display: flex;
 	flex-direction: column;
 	position: relative;
