@@ -1,6 +1,10 @@
 <template>
-	<div class="code-wrap__wrapper">
+	<div class="code-wrap__buton-wrapper">
+		<button type="button" @click="toggleCodeWrap" id="close-popup">Show CSS</button>
+	</div>
+	<div class="code-wrap__wrapper" v-if="codeWrapVisible">
 		<div :class="{ 'code-wrap': true, 'code-wrap--visible': codeWrapVisible }">
+			<button type="button" @click="toggleCodeWrap" class="code-wrap__close">Close <span>&times;</span></button>
 			<div class="code">
 			<h2>Headline</h2>
 <pre>
@@ -49,9 +53,10 @@ p {
 }
 			</pre>
 			</div>
-			<button type="button" @click="toggleCodeWrap" class="toggle code-wrap--toggle">CSS <span>&times;</span></button>
 		</div>
+		<div class="code-wrap__screen" aria-hidden="true" v-if="codeWrapVisible" @click="toggleCodeWrap"></div>
 	</div>
+
 </template>
 
 <script lang="ts">
@@ -79,6 +84,10 @@ export default {
 			codeWrapVisible,
 			toggleCodeWrap() {
 				codeWrapVisible.value = !codeWrapVisible.value;
+				let closeButton = document.getElementById('close-popup');
+				if (closeButton) {
+					closeButton.focus();
+				}
 			}
 		}
 	}
@@ -87,20 +96,32 @@ export default {
 
 <style>
 .code-wrap__wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	position: fixed;
-	top: 0;
+	inset: 0;
 }
 .code-wrap {
-	transform: translateY(-90%);
+	transform: scale(0);
 	transition: transform 0.3s ease-in-out;
-	position: relative;
 	border: 1px solid var(--color-white);
 	border-top: 0;
 	background-color: var(--color-lapis);
 	padding: 1em;
+	z-index: 101;
+}
+.code-wrap__screen {
+	background-color: var(--color-gunmetal);
+	opacity: 0.5;
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
 }
 .code-wrap--visible {
-	transform: translateY(0);
+	transform: scale(1);
 }
 .code-wrap--toggle {
 	position: absolute;
@@ -110,6 +131,8 @@ export default {
 	height: 3em;
 	border-top: 0;
 	border-radius: 0 0 0.333em 0.333em;
-
+}
+.code-wrap__buton-wrapper {
+	padding: 2em 0;
 }
 </style>
