@@ -34,6 +34,10 @@ body {
   line-height: 1.4;
 }
 
+main {
+  margin-bottom: 3em;
+}
+
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   margin: 0.666em 0 1em 0;
@@ -67,9 +71,17 @@ pre {
   }
   .controls__panel {
     background-color: var(--color-alice);
+    border: 1px solid var(--color-lapis);
   }
   .toggle {
     background-color: var(--color-alice);
+    border-color: var(--color-lapis);
+  }
+  fieldset {
+    border-color: var(--color-alice);
+  }
+  input[type='range'] {
+    accent-color: var(--color-munsel);
   }
 }
 @media (prefers-color-scheme: dark) {
@@ -85,8 +97,16 @@ pre {
   }
   .controls__panel {
     background-color: var(--color-gunmetal);
+    border: 1px solid var(--color-lapis);
   }
   .toggle {
     background-color: var(--color-gunmetal);
+    border-color: var(--color-lapis);
+  }
+  fieldset {
+    border-color: var(--color-lapis);
+  }
+  input[type='range'] {
+    accent-color: var(--color-lapis);
   }
 }

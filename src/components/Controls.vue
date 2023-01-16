@@ -7,50 +7,58 @@
 			<fieldset>
 				<legend>Header Text</legend>
 				<div class="controls__slider">
-					<label for="headerSizeMin">Header Size Minimum</label>
-					<input
-						type="range"
-						min="1"
-						max="100"
-						step="1"
-						class="slider"
-						id="headerSizeMin"
-						v-model="headerSizeMin"
-					/>
-					{{ headerSizeMin }}px
-					<label for="headerSizeFluid">Header Size Fluid</label>
-					<input
-						type="range"
-						min="1"
-						max="20"
-						step="0.1"
-						class="slider"
-						id="headerSizeFluid"
-						v-model="headerSizeFluid"
-					/>
-					{{ headerSizeFluid }}vw
-					<label for="headerSizeMax">Header Size Maximum</label>
-					<input
-						type="range"
-						min="1"
-						max="100"
-						step="1"
-						class="slider"
-						id="headerSizeMax"
-						v-model="headerSizeMax"
-					/>
-					{{ headerSizeMax }}px
-					<label for="headerLineHeight">Header Line Height</label>
-					<input
-						type="range"
-						min="0.1"
-						max="3"
-						step="0.1"
-						class="slider"
-						id="headerLineHeight"
-						v-model="headerLineHeight"
-					/>
-					{{ headerLineHeight }}
+					<div>
+						<label for="headerSizeMin">Header Size Minimum</label>
+						<input
+							type="range"
+							min="1"
+							max="100"
+							step="1"
+							class="slider"
+							id="headerSizeMin"
+							v-model="headerSizeMin"
+						/>
+						<span>{{ headerSizeMin }}px</span>
+					</div>
+					<div>
+						<label for="headerSizeFluid">Header Size Fluid</label>
+						<input
+							type="range"
+							min="1"
+							max="20"
+							step="0.1"
+							class="slider"
+							id="headerSizeFluid"
+							v-model="headerSizeFluid"
+						/>
+						<span>{{ headerSizeFluid }}vw</span>
+					</div>
+					<div>
+						<label for="headerSizeMax">Header Size Maximum</label>
+						<input
+							type="range"
+							min="1"
+							max="100"
+							step="1"
+							class="slider"
+							id="headerSizeMax"
+							v-model="headerSizeMax"
+						/>
+						<span>{{ headerSizeMax }}px</span>
+					</div>
+					<div>
+						<label for="headerLineHeight">Header Line Height</label>
+						<input
+							type="range"
+							min="0.1"
+							max="3"
+							step="0.1"
+							class="slider"
+							id="headerLineHeight"
+							v-model="headerLineHeight"
+						/>
+						<span>{{ headerLineHeight }}</span>
+					</div>
 					<label for="headerFont">Header Font: </label>
 					<select id="headerFont" value="headerFont" name="headerFont" v-model="selectedHeaderFont">
 						<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
@@ -298,16 +306,24 @@ export default {
 	display: flex;
 	flex-direction: column;
 }
+.controls__slider > div {
+	margin-bottom: 1em;
+}
+.controls__slider > div > span {
+	font-weight: 500;
+	font-style: italic;
+}
 .controls__panel {
 	/* background-color: var(--color-lapis); */
 	display: flex;
 	flex-direction: column;
 	position: relative;
 	padding: 1em;
-	transform: translateX(-90%);
+	transform: translateX(calc(-100% + 1em));
 	transition: transform 0.3s ease-in-out;
-	border-right: 1px solid white;
-	height: 100%;
+	border-left: 0;
+	border-top: 0;
+	/* height: 100%; */
 }
 .controls__panel--open {
 	/* position: relative; */
@@ -328,5 +344,18 @@ export default {
 	font-size: 1.5em;	
 	position: relative;
 	top: 0.125em;
+}
+
+fieldset {
+	margin-bottom: 1em;
+	box-shadow: none;
+}
+legend {
+	font-size: 1.5em;
+	margin-bottom: 0.5em;
+	font-weight: 500;
+}
+label {
+	font-size: 0.875rem;
 }
 </style>
