@@ -14,6 +14,34 @@
 					>Material Design Type Scale</a
 				>
 			</li>
+			<li>
+				<a
+					href="https://type-scale.com/"
+					target="_blank"
+					>Type Scale</a
+				>
+			</li>
+			<li>
+				<a
+					href="https://www.smashingmagazine.com/2016/05/fluid-typography/"
+					target="_blank"
+					>Fluid Typography</a
+				>
+			</li>
+			<li>
+				<a
+					href="https://css-tricks.com/snippets/css/fluid-typography/"
+					target="_blank"
+					>Fluid Typography (CSS Tricks)</a
+				>
+			</li>
+			<li>
+				<a
+					href="https://www.modularscale.com/"
+					target="_blank"
+					>Modular Scale</a
+					>
+			</li>
 		</ul>
 	</div>
 </template>
