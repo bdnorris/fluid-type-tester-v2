@@ -90,6 +90,21 @@ select option {
   font-weight: normal;
 }
 
+button {
+  background-image: none;
+  background-color: transparent;
+  border-radius: var(--border-radius);
+  box-shadow: none;
+  -webkit-appearance: none;
+  border: none;
+  padding: 1em 2em;
+  margin: 0;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -100,7 +115,8 @@ select option {
     color: var(--color-munsel);
   }
   button {
-    background-color: var(--color-munsel);
+    background-color: var(--color-lapis);
+    color: var(--color-white);
   }
   .controls__panel {
     background-color: var(--color-alice);
@@ -109,6 +125,7 @@ select option {
   .toggle {
     background-color: var(--color-alice);
     border-color: var(--color-lapis);
+    color: var(--color-gunmetal);
   }
   fieldset {
     border-color: var(--color-alice);
@@ -141,7 +158,8 @@ select option {
     color: var(--color-munsel);
   }
   button {
-    background-color: var(--color-munsel);
+    background-color: var(--color-blue);
+    color: var(--color-gunmetal);
   }
   .controls__panel {
     background-color: var(--color-gunmetal);
@@ -150,6 +168,7 @@ select option {
   .toggle {
     background-color: var(--color-gunmetal);
     border-color: var(--color-lapis);
+    color: var(--color-alice);
   }
   fieldset {
     border-color: var(--color-lapis);
