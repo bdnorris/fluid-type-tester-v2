@@ -130,7 +130,7 @@ export default {
 	padding: 0 1em;
 	height: 3em;
 	border-top: 0;
-	border-radius: 0 0 0.333em 0.333em;
+	border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 .code-wrap__buton-wrapper {
 	padding: 2em 0;

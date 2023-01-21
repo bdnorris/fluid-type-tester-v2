@@ -9,6 +9,7 @@
 				<div class="controls__slider">
 					<div>
 						<label for="headerSizeMin">Header Size Minimum</label>
+						<span>{{ headerSizeMin }}px</span>
 						<input
 							type="range"
 							min="1"
@@ -18,10 +19,10 @@
 							id="headerSizeMin"
 							v-model="headerSizeMin"
 						/>
-						<span>{{ headerSizeMin }}px</span>
 					</div>
 					<div>
 						<label for="headerSizeFluid">Header Size Fluid</label>
+						<span>{{ headerSizeFluid }}vw</span>
 						<input
 							type="range"
 							min="1"
@@ -31,10 +32,10 @@
 							id="headerSizeFluid"
 							v-model="headerSizeFluid"
 						/>
-						<span>{{ headerSizeFluid }}vw</span>
 					</div>
 					<div>
 						<label for="headerSizeMax">Header Size Maximum</label>
+						<span>{{ headerSizeMax }}px</span>
 						<input
 							type="range"
 							min="1"
@@ -44,10 +45,10 @@
 							id="headerSizeMax"
 							v-model="headerSizeMax"
 						/>
-						<span>{{ headerSizeMax }}px</span>
 					</div>
 					<div>
 						<label for="headerLineHeight">Header Line Height</label>
+						<span>{{ headerLineHeight }}</span>
 						<input
 							type="range"
 							min="0.1"
@@ -57,7 +58,6 @@
 							id="headerLineHeight"
 							v-model="headerLineHeight"
 						/>
-						<span>{{ headerLineHeight }}</span>
 					</div>
 					<label for="headerFont">Header Font: </label>
 					<select id="headerFont" value="headerFont" name="headerFont" v-model="selectedHeaderFont">
@@ -312,6 +312,8 @@ export default {
 .controls__slider > div > span {
 	font-weight: 500;
 	font-style: italic;
+	margin-left: 1ch;
+	display: inline-block;
 }
 .controls__panel {
 	/* background-color: var(--color-lapis); */
@@ -336,7 +338,7 @@ export default {
 	height: 3em;
 	transform: rotate(90deg);
 	border-bottom: 0;
-	border-radius: 0.333em 0.333em 0 0;
+	border-radius: var(--border-radius) var(--border-radius) 0 0;
 	padding: 0 1em;
 	/* box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2); */
 }
