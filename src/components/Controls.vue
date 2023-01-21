@@ -64,7 +64,7 @@
 						<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
 					</select>
 					<label for="headerCustomFont">
-						Header Custom Font (if not in list above)
+						Header Custom Font <br>(if not listed above)
 					</label>
 					<input type="text" id="headerCustomFont" v-model="headerCustomFont" />
 				</div>
@@ -121,7 +121,7 @@
 						<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
 					</select>
 					<label for="bodyCustomFont">
-						Body Custom Font (if not in list above)
+						Body Custom Font <br>(if not listed above)
 					</label>
 					<input type="text" id="bodyCustomFont" v-model="bodyCustomFont" />
 				</div>
@@ -245,13 +245,17 @@ export default {
 			headerCustomFont.value = '';
 		})
 		watch(bodyCustomFont, (newVal) => {
-			if (newVal) {
+			if (newVal !== '') {
 				store.commit('setBodyFont', newVal);
+			} else {
+				store.commit('setBodyFont', selectedBodyFont.value);
 			}
 		})
 		watch(headerCustomFont, (newVal) => {
-			if (newVal) {
+			if (newVal !== '') {
 				store.commit('setHeaderFont', newVal);
+			} else {
+				store.commit('setHeaderFont', selectedHeaderFont.value);
 			}
 		})
 		onMounted(() => {

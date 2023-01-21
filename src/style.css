@@ -98,11 +98,24 @@ button {
   -webkit-appearance: none;
   border: none;
   padding: 1em 2em;
-  margin: 0;
+  margin: 0 0 1em 0;
   font-family: inherit;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 600;
+}
+
+input {
+  padding: 0.5em;
+  font-size: 1rem;
+  box-shadow: none;
+  border-radius: var(--border-radius);
+}
+
+input[type='checkbox'] + label {
+  padding-left: 0.5ch;
+  position: relative;
+  bottom: 0.125em;
 }
 
 
@@ -148,6 +161,17 @@ button {
     box-shadow: 0 0 1px 3px var(--color-alice);
     color: var(--color-gunmetal);
   }
+  input {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-blue);
+  }
+  input:focus {
+    border-color: var(--color-coral);
+  }
+  footer {
+    background-color: var(--color-alice);
+    color: var(--color-gunmetal);
+  }
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -190,5 +214,16 @@ button {
     border-color: var(--color-coral);
     box-shadow: 0 0 1px 3px var(--color-lapis);
     color: var(--color-lapis);
+  }
+  input {
+    background-color: var(--color-lapis);
+    border: 1px solid var(--color-gunmetal);
+  }
+  input:focus {
+    border-color: var(--color-coral);
+  }
+  footer {
+    background-color: var(--color-lapis);
+    color: var(--color-white);
   }
 }

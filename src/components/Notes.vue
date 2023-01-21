@@ -53,9 +53,6 @@ export default {
 </script>
 
 <style>
-footer {
-	background-color: var(--color-blue);
-}
 footer > div {
 	padding: 2em;
 	max-width: 76ch;
