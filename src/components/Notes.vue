@@ -18,15 +18,22 @@
 				<a
 					href="https://type-scale.com/"
 					target="_blank"
-					>Type Scale</a
+					>Type Scale (by Jeremy Church)</a
 				>
 			</li>
 			<li>
 				<a
-					href="https://www.smashingmagazine.com/2016/05/fluid-typography/"
+					href="https://www.modularscale.com/"
 					target="_blank"
-					>Fluid Typography</a
-				>
+					>Modular Scale (by Scott Kellum and Tim Brown.)</a
+					>
+			</li>
+			<li>
+				<a
+					href="https://modern-fluid-typography.vercel.app/"
+					target="_blank"
+					>Modern fluid typography editor (by Adrian Bece)</a
+					>
 			</li>
 			<li>
 				<a
@@ -37,16 +44,16 @@
 			</li>
 			<li>
 				<a
-					href="https://www.modularscale.com/"
+					href="https://www.smashingmagazine.com/2022/01/modern-fluid-typography-css-clamp/"
 					target="_blank"
-					>Modular Scale</a
-					>
+					>Fluid Typography with Clamp (Smashing Magazine)</a
+				>
 			</li>
 		</ul>
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
 	name: 'Notes',
 };
