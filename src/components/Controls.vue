@@ -61,7 +61,7 @@
 					</div>
 					<label for="headerFont">Header Font: </label>
 					<select id="headerFont" value="headerFont" name="headerFont" v-model="selectedHeaderFont">
-						<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
+						<option v-for="(font, index) in top100Fonts" :value="font['family']" :key="index">{{ font['family'] }}</option>
 					</select>
 					<label for="headerCustomFont">
 						Header Custom Font <br>(if not listed above)
@@ -118,7 +118,7 @@
 					{{ bodyLineHeight }}
 					<label for="bodyFont">Body Font: </label>
 					<select id="bodyFont" value="bodyFont" name="bodyFont" v-model="selectedBodyFont">
-						<option v-for="(font, index) in top100Fonts" :value="font.family" :key="index">{{ font.family }}</option>
+						<option v-for="(font, index) in top100Fonts" :value="font['family']" :key="index">{{ font['family'] }}</option>
 					</select>
 					<label for="bodyCustomFont">
 						Body Custom Font <br>(if not listed above)
@@ -207,17 +207,17 @@ export default {
 		const selectedBodyFont = ref(store.state.bodyFont);
 		const bodyCustomFont = ref('');
 		const headerCustomFont = ref('');
-		const selectedHeaderFontFamily = computed(() => {
-			return top100Fonts.value.find((font) => font.family == selectedHeaderFont.value);
-		});
 		const selectedHeaderFont = ref(store.state.headerFont);
+		const selectedHeaderFontFamily = computed(() => {
+			return top100Fonts.value.find((font) => font['family'] == selectedHeaderFont.value);
+		});	
 		const selectedBodyFontFamily = computed(() => {
 			if (bodyCustomFont.value) {
 				return {
 					family: bodyCustomFont.value,
 				}
 			} else {
-				return top100Fonts.value.find((font) => font.family == selectedBodyFont.value);
+				return top100Fonts.value.find((font) => font['family'] == selectedBodyFont.value);
 			}
 		});
 		const bodyCssUrl = computed(() => {
@@ -231,7 +231,7 @@ export default {
 		const headerCssUrl = computed(() => {
 			if (!selectedBodyFontFamily.value) return '';
 			if (!headerCustomFont.value) {
-				return (selectedHeaderFontFamily) ? `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap` : false;
+				return (selectedHeaderFontFamily.value) ? `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap` : false;
 			} else {
 				return false;
 			}
