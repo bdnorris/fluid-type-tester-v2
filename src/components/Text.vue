@@ -53,7 +53,7 @@ export default {
 		const article = ref(articles[0]);
 		watch(selectedArticle, (newVal) => {
 			// console.log('newVal', newVal)
-			article.value = articles.find((article) => article.key === newVal);
+			article.value = articles.find((article: { key: { [x: string]: object; }; }) => article.key === newVal);
 		});
 		return {
 			bodySizeMin,

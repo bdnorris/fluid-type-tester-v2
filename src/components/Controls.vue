@@ -231,7 +231,7 @@ export default {
 		const headerCssUrl = computed(() => {
 			if (!selectedBodyFontFamily.value) return '';
 			if (!headerCustomFont.value) {
-				return `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap`
+				return (selectedHeaderFontFamily) ? `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap` : false;
 			} else {
 				return false;
 			}

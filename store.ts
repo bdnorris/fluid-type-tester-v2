@@ -81,7 +81,7 @@ export const store = createStore<State>({
 	getters: {
 		headingSize: (state) => (level: string) => {
 			// console.log('headingSize', level)
-			let sizes = [];
+			let sizes: any[] = [];
 			if (level === 'h2') {
 			sizes = [
 				(state.headerSizeMin / state.headerRatio),
