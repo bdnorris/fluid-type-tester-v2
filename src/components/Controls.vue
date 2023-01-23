@@ -210,7 +210,7 @@ export default {
 		const selectedHeaderFont = ref(store.state.headerFont);
 		const selectedHeaderFontFamily = computed(() => {
 			return top100Fonts.value.find((font) => font['family'] == selectedHeaderFont.value);
-		});	
+		});
 		const selectedBodyFontFamily = computed(() => {
 			if (bodyCustomFont.value) {
 				return {

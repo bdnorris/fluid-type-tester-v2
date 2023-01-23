@@ -50,8 +50,7 @@ h6 {
 p {
 	font-size: clamp({{ bodySizeMin }}px, calc(1rem + {{ bodySizeFluid }}vw), {{ bodySizeMax }}px);
 	line-height: {{ bodyLineHeight }};
-}
-			</pre>
+}</pre>
 			</div>
 		</div>
 		<div class="code-wrap__screen" aria-hidden="true" v-if="codeWrapVisible" @click="toggleCodeWrap"></div>
@@ -106,8 +105,7 @@ export default {
 	transform: scale(0);
 	transition: transform 0.3s ease-in-out;
 	border: 1px solid var(--color-white);
-	border-top: 0;
-	background-color: var(--color-lapis);
+	/* border-top: 0; */
 	padding: 1em;
 	z-index: 101;
 }

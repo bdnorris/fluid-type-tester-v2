@@ -46,8 +46,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 pre {
-  background: var(--color-gunmetal);
-  color: var(--color-alice);
   padding: 1em;
 }
 
@@ -114,8 +112,9 @@ input {
 
 input[type='checkbox'] + label {
   padding-left: 0.5ch;
-  position: relative;
+  /* position: relative; */
   bottom: 0.125em;
+  /* z-index: 1; */
 }
 
 
@@ -134,6 +133,14 @@ input[type='checkbox'] + label {
   .controls__panel {
     background-color: var(--color-alice);
     border: 1px solid var(--color-lapis);
+  }
+  .code-wrap {
+    background-color: var(--color-alice);
+    border: 1px solid var(--color-lapis);
+  }
+  pre {
+    background: var(--color-gunmetal);
+    color: var(--color-alice);
   }
   .toggle {
     background-color: var(--color-alice);
@@ -189,6 +196,16 @@ input[type='checkbox'] + label {
     background-color: var(--color-gunmetal);
     border: 1px solid var(--color-lapis);
   }
+  .code-wrap {
+    background-color: var(--color-gunmetal);
+    border: 1px solid var(--color-lapis);
+  }
+  pre {
+    /* color: var(--color-white); */
+    color: var(--color-gunmetal);
+    background: var(--color-alice);
+  }
+  
   .toggle {
     background-color: var(--color-gunmetal);
     border-color: var(--color-lapis);
