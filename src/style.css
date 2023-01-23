@@ -166,7 +166,6 @@ input[type='checkbox'] + label {
   select:focus {
     border-color: var(--color-coral);
     box-shadow: 0 0 1px 3px var(--color-alice);
-    color: var(--color-gunmetal);
   }
   input {
     background-color: var(--color-white);
@@ -230,7 +229,6 @@ input[type='checkbox'] + label {
   select:focus {
     border-color: var(--color-coral);
     box-shadow: 0 0 1px 3px var(--color-lapis);
-    color: var(--color-lapis);
   }
   input {
     background-color: var(--color-lapis);
