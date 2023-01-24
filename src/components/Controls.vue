@@ -60,7 +60,7 @@
 						/>
 					</div>
 					<label for="headerFont">Header Font: </label>
-					<select id="headerFont" value="headerFont" name="headerFont" v-model="selectedHeaderFont">
+					<select id="headerFont" value="headerFont" name="headerFont" @change="setHeaderFont">
 						<option v-for="(font, index) in top100Fonts" :value="font['family']" :key="index">{{ font['family'] }}</option>
 					</select>
 					<label for="headerCustomFont">
@@ -117,7 +117,7 @@
 					/>
 					{{ bodyLineHeight }}
 					<label for="bodyFont">Body Font: </label>
-					<select id="bodyFont" value="bodyFont" name="bodyFont" v-model="selectedBodyFont">
+					<select id="bodyFont" value="bodyFont" name="bodyFont" @change="setBodyFont">
 						<option v-for="(font, index) in top100Fonts" :value="font['family']" :key="index">{{ font['family'] }}</option>
 					</select>
 					<label for="bodyCustomFont">
@@ -233,7 +233,7 @@ export default {
 			if (!headerCustomFont.value) {
 				return (selectedHeaderFontFamily.value) ? `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap` : false;
 			} else {
-				return false;
+				return '';
 			}
 		})
 		watch(selectedBodyFont, (newVal) => {
@@ -272,6 +272,14 @@ export default {
 		const toggleControls = () => {
 			controlsVisible.value = !controlsVisible.value;
 		};
+		const setHeaderFont = (e: Event) => {
+			const target = e.target as HTMLSelectElement;
+			selectedHeaderFont.value = target.value
+		}
+		const setBodyFont = (e: Event) => {
+			const target = e.target as HTMLSelectElement;
+			selectedBodyFont.value = target.value
+		}
 		return {
 			bodySizeMin,
 			bodySizeFluid,
@@ -298,6 +306,8 @@ export default {
 			headerCssUrl,
 			controlsVisible,
 			toggleControls,
+			setHeaderFont,
+			setBodyFont,
 		};
 	},
 };
