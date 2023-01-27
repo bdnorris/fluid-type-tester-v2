@@ -230,8 +230,10 @@ export default {
 		})
 		const headerCssUrl = computed(() => {
 			if (!selectedBodyFontFamily.value) return '';
-			if (!headerCustomFont.value) {
-				return (selectedHeaderFontFamily.value) ? `https://fonts.googleapis.com/css2?family=${selectedHeaderFontFamily.value.family.replace(' ', '+')}:ital,wght@0,400;0,700;1,400;1,700&display=swap` : false;
+			if (!headerCustomFont.value && selectedHeaderFontFamily.value) {
+				const selectedFamilyValue = (selectedHeaderFontFamily.value as any);
+				const familyName = selectedFamilyValue.family.replace(' ', '+');
+				return `https://fonts.googleapis.com/css2?family=${familyName}:ital,wght@0,400;0,700;1,400;1,700&display=swap`;
 			} else {
 				return '';
 			}
