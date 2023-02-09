@@ -4,59 +4,62 @@
 		<link v-if="headerCssUrl" :href="headerCssUrl" rel="stylesheet" />
 		<div :class="{ 'controls__panel': true, 'controls__panel--open': controlsVisible }" aria-expanded="true">
 			<button type="button" class="toggle controls__toggle" @click="toggleControls">Controls <span v-if="controlsVisible">&times;</span><span v-else>+</span></button>
-			<fieldset>
+			<fieldset :class="{'collapse': collapsed.includes('header')}" :aria-expanded="!collapsed.includes('header')">
 				<legend>Header Text</legend>
+				<button class="button--toggle" @click="collapseFieldset('header')">
+					Header Text<span v-if="collapsed.includes('header')">+</span><span v-else>&minus;</span>
+				</button>
 				<div class="controls__slider">
 					<div>
 						<label for="headerSizeMin">Header Size Minimum</label>
 						<span>{{ headerSizeMin }}px</span>
 						<input
-							type="range"
-							min="1"
-							max="100"
-							step="1"
-							class="slider"
-							id="headerSizeMin"
-							v-model="headerSizeMin"
+						type="range"
+						min="1"
+						max="100"
+						step="1"
+						class="slider"
+						id="headerSizeMin"
+						v-model="headerSizeMin"
 						/>
 					</div>
 					<div>
 						<label for="headerSizeFluid">Header Size Fluid</label>
 						<span>{{ headerSizeFluid }}vw</span>
 						<input
-							type="range"
-							min="1"
-							max="20"
-							step="0.1"
-							class="slider"
-							id="headerSizeFluid"
-							v-model="headerSizeFluid"
+						type="range"
+						min="1"
+						max="20"
+						step="0.1"
+						class="slider"
+						id="headerSizeFluid"
+						v-model="headerSizeFluid"
 						/>
 					</div>
 					<div>
 						<label for="headerSizeMax">Header Size Maximum</label>
 						<span>{{ headerSizeMax }}px</span>
 						<input
-							type="range"
-							min="1"
-							max="100"
-							step="1"
-							class="slider"
-							id="headerSizeMax"
-							v-model="headerSizeMax"
+						type="range"
+						min="1"
+						max="100"
+						step="1"
+						class="slider"
+						id="headerSizeMax"
+						v-model="headerSizeMax"
 						/>
 					</div>
 					<div>
 						<label for="headerLineHeight">Header Line Height</label>
 						<span>{{ headerLineHeight }}</span>
 						<input
-							type="range"
-							min="0.1"
-							max="3"
-							step="0.1"
-							class="slider"
-							id="headerLineHeight"
-							v-model="headerLineHeight"
+						type="range"
+						min="0.1"
+						max="3"
+						step="0.1"
+						class="slider"
+						id="headerLineHeight"
+						v-model="headerLineHeight"
 						/>
 					</div>
 					<label for="headerFont">Header Font: </label>
@@ -69,8 +72,11 @@
 					<input type="text" id="headerCustomFont" v-model="headerCustomFont" />
 				</div>
 			</fieldset>
-			<fieldset>
+			<fieldset :class="{'collapse': collapsed.includes('body')}">
 				<legend>Body Text</legend>
+				<button class="button--toggle" @click="collapseFieldset('body')">
+					Body Text<span v-if="collapsed.includes('body')">+</span><span v-else>&minus;</span>
+				</button>
 				<div class="controls__slider">
 					<label for="bodySizeMin">Body Size Minimum</label>
 					<input
@@ -132,8 +138,11 @@
 			<button type="button" @click="removeHeading" v-if="headingLevels > 1">
 				Remove a Heading Level
 			</button>
-			<fieldset v-if="headingLevels > 1">
+			<fieldset v-if="headingLevels > 1" :class="{'collapse': collapsed.includes('headerRatio')}" :aria-expanded="!collapsed.includes('headerRatio')">
 				<legend>Header Ratio</legend>
+				<button class="button--toggle" @click="collapseFieldset('headerRatio')">
+					Header Ratio<span v-if="collapsed.includes('headerRatio')">+</span><span v-else>&minus;</span>
+				</button>
 				<div class="controls__slider">
 					<label for="headerRatio">Header Ratio</label>
 					<input
@@ -152,7 +161,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, ref, watch } from "@vue/runtime-core";
+import { computed, onMounted, Ref, ref, watch } from "@vue/runtime-core";
 import { useStore } from "../../store";
 export default {
 	setup() {
@@ -211,6 +220,14 @@ export default {
 		const selectedHeaderFontFamily = computed(() => {
 			return top100Fonts.value.find((font) => font['family'] == selectedHeaderFont.value);
 		});
+		const collapsed: Ref<String[]> = ref(['header', 'body']);
+		const collapseFieldset = function (fieldset: String) {
+			if (collapsed.value.includes(fieldset)) {
+				collapsed.value.splice(collapsed.value.indexOf(fieldset), 1);
+			} else {
+				collapsed.value.push(fieldset);
+			}
+		};
 		const selectedBodyFontFamily = computed(() => {
 			if (bodyCustomFont.value) {
 				return {
@@ -310,6 +327,8 @@ export default {
 			toggleControls,
 			setHeaderFont,
 			setBodyFont,
+			collapsed,
+			collapseFieldset
 		};
 	},
 };
@@ -367,13 +386,39 @@ export default {
 fieldset {
 	margin-bottom: 1em;
 	box-shadow: none;
+	position: relative;
+	padding-top: 2em;
+	margin-bottom: 2em;
+	margin-top: 1em;
+}
+fieldset.collapse > div {
+	display: none;
 }
 legend {
-	font-size: 1.5em;
-	margin-bottom: 0.5em;
-	font-weight: 500;
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+	pointer-events: none;
+	visibility: hidden;
+	opacity: 0;
 }
 label {
 	font-size: 0.875rem;
+}
+
+.button--toggle {
+	position: absolute;
+	top: -0.666em;
+	right: 0;
+	padding: 0 0.25em 0 0.5em;
+	color: var(--default-light);
+	font-size: 1.5em;
+	margin-bottom: 0.5em;
+	font-weight: 500;
+	text-transform: none;
+	letter-spacing: 0;
+}
+.button--toggle > span {
+	padding-left: 0.5em;
 }
 </style>

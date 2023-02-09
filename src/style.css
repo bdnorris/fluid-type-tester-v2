@@ -21,8 +21,9 @@
   --color-coral: #f17474;
   --color-macaroni: #fdb67c;
 
+  
   --border-radius: 0.333em;
-
+  
   color: var(--color-white);
   background-color: var(--color-gunmetal);
 }
@@ -50,7 +51,7 @@ pre {
 }
 
 .toggle {
-	border: 1px solid white;
+  border: 1px solid white;
 	text-transform: uppercase;
 	letter-spacing: 0.2em;
 	line-height: 1;
@@ -122,6 +123,7 @@ input[type='checkbox'] + label {
   :root {
     color: var(--color-gunmetal);
     background-color: var(--color-white);
+    --default-color: var(--color-munsel);
   }
   a:hover {
     color: var(--color-munsel);
@@ -178,11 +180,16 @@ input[type='checkbox'] + label {
     background-color: var(--color-alice);
     color: var(--color-gunmetal);
   }
+  .button--toggle {
+    background-color: var(--color-alice);
+
+  }
 }
 @media (prefers-color-scheme: dark) {
   :root {
     color: var(--color-white);
     background-color: var(--color-gunmetal);
+    --default-color: var(--color-gunmetal);
   }
   a:hover {
     color: var(--color-munsel);
@@ -240,5 +247,8 @@ input[type='checkbox'] + label {
   footer {
     background-color: var(--color-lapis);
     color: var(--color-white);
+  }
+  .button--toggle {
+    background-color: var(--color-gunmetal);
   }
 }
