@@ -171,6 +171,12 @@ input[type='checkbox'] + label {
     background-color: var(--color-lapis);
     color: var(--color-white);
   }
+  button.code-wrap__view,
+  button.code-wrap__close {
+    background-color: transparent;
+    color: var(--color-gunmetal);
+    border: 1px solid var(--color-lapis);
+  }
   .controls__panel {
     background-color: var(--color-alice);
   }
@@ -243,6 +249,12 @@ input[type='checkbox'] + label {
   button {
     background-color: var(--color-blue);
     color: var(--color-gunmetal);
+  }
+  button.code-wrap__view,
+  button.code-wrap__close {
+    background-color: transparent;
+    color: var(--color-white);
+    border: 1px solid var(--color-lapis);
   }
   .controls__panel {
     background-color: var(--color-gunmetal);

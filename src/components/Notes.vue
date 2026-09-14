@@ -1,11 +1,10 @@
 <template>
-	<div>
-		<h2>Notes</h2>
+	<details class="notes">
+		<summary>Further reading</summary>
 		<p>
 			Inspired by some other online tools, this attempts to combine some basic
 			font and size testing with some new fluid type techniques.
 		</p>
-		<h3>You might also want to check out:</h3>
 		<ul>
 			<li>
 				<a
@@ -50,7 +49,7 @@
 				>
 			</li>
 		</ul>
-	</div>
+	</details>
 </template>
 
 <script lang="ts">
@@ -60,21 +59,24 @@ export default {
 </script>
 
 <style>
-.lab__notes > div {
-	padding: var(--space-5) max(var(--space-6), env(safe-area-inset-right)) max(var(--space-5), env(safe-area-inset-bottom)) max(var(--space-6), env(safe-area-inset-left));
+.lab__notes .notes {
+	padding: var(--space-4) max(var(--space-6), env(safe-area-inset-right)) max(var(--space-4), env(safe-area-inset-bottom)) max(var(--space-6), env(safe-area-inset-left));
 	max-width: 69ch;
 }
-.lab__notes h2 {
-	margin: 0 0 var(--space-3);
-	font-size: 1rem;
-}
-.lab__notes h3 {
-	margin: var(--space-5) 0 var(--space-3);
+.lab__notes summary {
 	font-size: 0.875rem;
+	font-weight: 650;
+	cursor: pointer;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
 }
 .lab__notes p,
 .lab__notes li {
 	font-size: 0.875rem;
+}
+.lab__notes p {
+	margin: var(--space-3) 0 var(--space-4);
 }
 .lab__notes ul {
 	margin: 0;

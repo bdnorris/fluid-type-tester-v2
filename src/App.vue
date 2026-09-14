@@ -5,7 +5,7 @@
       <header class="lab__chrome">
         <div class="lab__identity">
           <p class="lab__title">Fluid Type Tester</p>
-          <p class="lab__prompt">Set min, fluid, and max, then watch the sample.</p>
+          <p class="lab__prompt">Set min, fluid, and max, then copy the CSS.</p>
         </div>
         <CSS />
       </header>

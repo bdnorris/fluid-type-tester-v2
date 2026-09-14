@@ -4,9 +4,10 @@
 		<link v-if="headerCssUrl" :href="headerCssUrl" rel="stylesheet" />
 		<div id="controls-panel" class="controls__panel">
 			<p v-if="clampNotice" class="controls__status controls__status--notice" role="status">{{ clampNotice }}</p>
+			<p class="controls__hint">Fluid is vw: it grows with the preview width.</p>
 
 			<fieldset class="controls__section">
-				<legend>Header</legend>
+				<legend>Heading</legend>
 				<div class="clamp-trio">
 					<div>
 						<div class="controls__pair">
@@ -73,28 +74,29 @@
 				</div>
 			</fieldset>
 
-			<fieldset class="controls__section">
-				<legend>Typefaces</legend>
+			<details class="controls__section controls__disclosure">
+				<summary>Typefaces</summary>
+				<p class="controls__hint">Pick from the list, or type a family that’s installed or on Google Fonts.</p>
 				<label for="fontFilter">Filter fonts</label>
 				<input
 					type="search"
 					id="fontFilter"
 					v-model="fontQuery"
 					autocomplete="off"
-					placeholder="Type to narrow the list"
+					placeholder="e.g. Roboto"
 				/>
-				<label for="headerFont">Header font</label>
+				<label for="headerFont">Heading font</label>
 				<select id="headerFont" name="headerFont" v-model="selectedHeaderFont" :disabled="visibleFonts.length === 0">
 					<option v-for="(font, index) in visibleFonts" :value="font.family" :key="'h-' + index">{{ font.family }}</option>
 				</select>
-				<label for="headerCustomFont">Header custom font</label>
+				<label for="headerCustomFont">Heading custom font</label>
 				<input
 					type="text"
 					id="headerCustomFont"
 					maxlength="80"
 					autocomplete="off"
 					spellcheck="false"
-					placeholder="Family name on this machine or Google Fonts"
+					placeholder="e.g. Iowan Old Style"
 					v-model="headerCustomFont"
 				/>
 				<label for="bodyFont">Body font</label>
@@ -108,19 +110,20 @@
 					maxlength="80"
 					autocomplete="off"
 					spellcheck="false"
-					placeholder="Family name on this machine or Google Fonts"
+					placeholder="e.g. Iowan Old Style"
 					v-model="bodyCustomFont"
 				/>
-			</fieldset>
+			</details>
 
-			<fieldset class="controls__section">
-				<legend>Scale</legend>
+			<details class="controls__section controls__disclosure">
+				<summary>Scale</summary>
+				<p class="controls__hint">Adds h2–h6 to the sample. Each level is smaller by the heading ratio.</p>
 				<div class="controls__actions">
 					<button type="button" @click="addHeading" :disabled="headingsMaxed">
-						Add heading level
+						Add a heading level
 					</button>
 					<button type="button" @click="removeHeading" v-if="headingLevels > 1">
-						Remove heading level
+						Remove the smallest heading
 					</button>
 				</div>
 				<div v-if="headingLevels > 1" class="controls__row">
@@ -137,9 +140,9 @@
 						v-model.number="headerRatio"
 					/>
 				</div>
-			</fieldset>
+			</details>
 
-			<p class="controls__status" :class="statusClass" role="status">{{ fontStatusMessage }}</p>
+			<p v-if="fontStatusMessage" class="controls__status" :class="statusClass" role="status">{{ fontStatusMessage }}</p>
 			<button
 				v-if="fontsStatus === 'error'"
 				type="button"
@@ -210,7 +213,7 @@ export default {
 			store.commit("setHeaderSizeMin", newVal);
 			headerSizeMax.value = store.state.headerSizeMax;
 			if (store.state.headerSizeMax !== before) {
-				announceClamp(`Header maximum raised to ${store.state.headerSizeMax}px so it stays at or above the minimum.`);
+				announceClamp(`Heading maximum raised to ${store.state.headerSizeMax}px so it stays at or above the minimum.`);
 			}
 		});
 		watch(headerSizeFluid, (newVal) => {
@@ -221,7 +224,7 @@ export default {
 			store.commit("setHeaderSizeMax", newVal);
 			headerSizeMin.value = store.state.headerSizeMin;
 			if (store.state.headerSizeMin !== before) {
-				announceClamp(`Header minimum lowered to ${store.state.headerSizeMin}px so it stays at or below the maximum.`);
+				announceClamp(`Heading minimum lowered to ${store.state.headerSizeMin}px so it stays at or below the maximum.`);
 			}
 		});
 		watch(headerRatio, (newVal) => {
@@ -280,12 +283,12 @@ export default {
 		});
 		const fontStatusMessage = computed(() => {
 			if (fontsStatus.value === "loading") return "Loading Google Fonts catalog…";
-			if (fontsStatus.value === "ready") return `Catalog loaded: ${catalogFonts.value.length} families.`;
+			if (fontsStatus.value === "ready") return "";
 			if (fontsStatus.value === "error") {
 				return "Couldn’t load Google Fonts. Using a built-in list. Check the network, then retry.";
 			}
 			if (!gfApiKey.value) {
-				return "Using a built-in font list. Add a Google Fonts API key as VITE_GF_API_KEY to load the full catalog.";
+				return "Using a built-in font list. Add VITE_GF_API_KEY for the full catalog.";
 			}
 			return "Using a built-in font list.";
 		});
@@ -422,7 +425,8 @@ export default {
 	border: 0;
 	min-width: 0;
 }
-.controls__section legend {
+.controls__section legend,
+.controls__disclosure summary {
 	position: static;
 	float: none;
 	width: 100%;
@@ -433,6 +437,15 @@ export default {
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	line-height: 1.3;
+	cursor: pointer;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+}
+.controls__section legend {
+	cursor: default;
+	min-height: 0;
+	display: block;
 }
 .clamp-trio,
 .controls__row {
@@ -507,6 +520,15 @@ export default {
 }
 .controls__status--notice {
 	color: var(--color-munsel);
+}
+.controls__hint {
+	font-size: 0.8125rem;
+	line-height: 1.4;
+	margin: 0;
+}
+.controls__hint code {
+	font-size: 0.875em;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 .controls__retry {
 	align-self: flex-start;

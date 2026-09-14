@@ -1,6 +1,10 @@
 <template>
-	<div class="code-wrap__button-wrapper">
-		<button type="button" ref="openButton" @click="openDialog">Show CSS</button>
+	<div class="code-wrap__chrome">
+		<button type="button" class="code-wrap__copy" ref="openButton" @click="copyCss">
+			{{ copyLabel }}
+		</button>
+		<button type="button" class="code-wrap__view" @click="openDialog">View CSS</button>
+		<p v-if="copyStatus && !codeWrapVisible" class="code-wrap__status" role="status">{{ copyStatus }}</p>
 	</div>
 	<Teleport to="body">
 		<div class="code-wrap__wrapper" v-if="codeWrapVisible">
@@ -15,21 +19,14 @@
 				@keydown="onDialogKeydown"
 			>
 				<div class="code-wrap__toolbar">
-					<h2 id="css-dialog-title">Generated CSS</h2>
-					<button type="button" @click="copyCss">{{ copyLabel }}</button>
+					<h2 id="css-dialog-title">CSS to copy</h2>
+					<button type="button" ref="dialogCopyButton" @click="copyCss">{{ copyLabel }}</button>
 					<button type="button" ref="closeButton" class="code-wrap__close" @click="closeDialog">
-						Close <span aria-hidden="true">&times;</span>
+						Close
 					</button>
 				</div>
 				<p v-if="copyStatus" class="code-wrap__status" role="status">{{ copyStatus }}</p>
-				<div class="code">
-					<h3>Headline</h3>
-<pre>{{ headingCss }}</pre>
-				</div>
-				<div class="code">
-					<h3>Paragraphs</h3>
-<pre>{{ paragraphCss }}</pre>
-				</div>
+				<pre>{{ cssText }}</pre>
 			</div>
 		</div>
 	</Teleport>
@@ -48,6 +45,7 @@ export default {
 		const copyLabel = ref("Copy CSS");
 		const dialogEl = ref<HTMLElement | null>(null);
 		const openButton = ref<HTMLButtonElement | null>(null);
+		const dialogCopyButton = ref<HTMLButtonElement | null>(null);
 		const closeButton = ref<HTMLButtonElement | null>(null);
 		let copyTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -119,15 +117,14 @@ export default {
 
 		const openDialog = () => {
 			codeWrapVisible.value = true;
-			copyStatus.value = "";
-			copyLabel.value = "Copy CSS";
 			nextTick(() => {
-				closeButton.value?.focus();
+				dialogCopyButton.value?.focus();
 			});
 		};
 
 		const closeDialog = () => {
 			codeWrapVisible.value = false;
+			copyStatus.value = "";
 			nextTick(() => {
 				openButton.value?.focus();
 			});
@@ -157,11 +154,14 @@ export default {
 		const copyCss = async () => {
 			try {
 				await navigator.clipboard.writeText(cssText.value);
-				copyStatus.value = "Copied to clipboard.";
+				copyStatus.value = "Copied.";
 				copyLabel.value = "Copied";
 			} catch {
-				copyStatus.value = "Couldn’t copy automatically — select the CSS below and copy it yourself.";
+				copyStatus.value = "Couldn’t copy automatically — select the CSS and copy it yourself.";
 				copyLabel.value = "Copy CSS";
+				if (!codeWrapVisible.value) {
+					openDialog();
+				}
 			}
 			if (copyTimer) clearTimeout(copyTimer);
 			copyTimer = setTimeout(() => {
@@ -180,12 +180,12 @@ export default {
 
 		return {
 			codeWrapVisible,
-			headingCss,
-			paragraphCss,
+			cssText,
 			copyStatus,
 			copyLabel,
 			dialogEl,
 			openButton,
+			dialogCopyButton,
 			closeButton,
 			openDialog,
 			closeDialog,
@@ -197,6 +197,25 @@ export default {
 </script>
 
 <style>
+.code-wrap__chrome {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--space-2) var(--space-3);
+	max-width: 22rem;
+}
+.code-wrap__copy,
+.code-wrap__view,
+.code-wrap__toolbar button {
+	margin: 0;
+	min-height: 44px;
+	padding: var(--space-3) var(--space-4);
+}
+.code-wrap__view:hover,
+.code-wrap__close:hover {
+	border-color: var(--color-munsel);
+}
 .code-wrap__wrapper {
 	display: flex;
 	justify-content: center;
@@ -212,7 +231,7 @@ export default {
 	max-height: min(90dvh, 100%);
 	overflow: auto;
 	min-width: 0;
-	padding: 1em;
+	padding: var(--space-5);
 	z-index: 101;
 }
 .code-wrap__screen {
@@ -231,34 +250,32 @@ export default {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 0.5em 1em;
-	margin-bottom: 0.75em;
+	gap: var(--space-2) var(--space-3);
+	margin-bottom: var(--space-4);
 }
 .code-wrap__toolbar h2 {
-	flex: 1 1 auto;
+	flex: 1 1 8rem;
 	margin: 0;
 	min-width: 0;
 	overflow-wrap: anywhere;
+	font-size: 1.125rem;
 }
-.code-wrap__toolbar button {
-	margin: 0;
-	min-height: 44px;
+.code-wrap__close {
+	background-color: transparent;
+	border: 1px solid var(--color-lapis);
+	color: inherit;
 }
 .code-wrap__status {
 	font-size: 0.875rem;
-	margin: 0 0 1em 0;
-	overflow-wrap: anywhere;
-}
-.code-wrap__button-wrapper {
-	padding: 0;
-}
-.code-wrap__button-wrapper button {
 	margin: 0;
-	padding: var(--space-3) var(--space-4);
+	flex: 1 1 100%;
+	overflow-wrap: anywhere;
+	color: var(--color-munsel);
 }
-.code pre {
+.code-wrap pre {
 	overflow-x: auto;
 	max-width: 100%;
+	margin: 0;
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
 }

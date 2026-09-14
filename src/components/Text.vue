@@ -19,15 +19,15 @@
 			</label>
 		</div>
 		<p v-if="contentEditable" class="text__edit-hint" role="status">
-			Editing the sample. Uncheck Edit content to restore the original passage.
+			Editing. Turn off Edit content to restore the sample.
 		</p>
 		<div class="viewport-bar">
 			<p class="viewport-bar__readout">
 				<span class="viewport-bar__width">{{ measuredWidth }}px</span>
 				<span class="viewport-bar__sep" aria-hidden="true">·</span>
-				<span>h1 {{ headingPx }}px</span>
+				<span>heading {{ headingPx }}px</span>
 				<span class="viewport-bar__sep" aria-hidden="true">·</span>
-				<span>p {{ bodyPx }}px</span>
+				<span>body {{ bodyPx }}px</span>
 			</p>
 			<div class="viewport-bar__presets" role="group" aria-label="Preview width">
 				<button
@@ -65,18 +65,18 @@
 					:contenteditable="contentEditable"
 				>
 					<h1>{{ article.mainHeading }}</h1>
-					<h2 v-if="headingCount > 1">Lorem ipsum dolor sit amet</h2>
-					<h3 v-if="headingCount > 2">Consectetur adipiscing elit, sed do</h3>
-					<h4 v-if="headingCount > 3">Eiusmod tempor incididunt ut</h4>
-					<h5 v-if="headingCount > 4">Labore et dolore magna aliqua</h5>
-					<h6 v-if="headingCount > 5">Leo vel fringilla est ullamcorper eget</h6>
+					<h2 v-if="sampleHeadings[0]">{{ sampleHeadings[0] }}</h2>
+					<h3 v-if="sampleHeadings[1]">{{ sampleHeadings[1] }}</h3>
+					<h4 v-if="sampleHeadings[2]">{{ sampleHeadings[2] }}</h4>
+					<h5 v-if="sampleHeadings[3]">{{ sampleHeadings[3] }}</h5>
+					<h6 v-if="sampleHeadings[4]">{{ sampleHeadings[4] }}</h6>
 					<p v-for="(paragraph, index) in article.paragraphs" :key="index" v-html="paragraph" />
 				</div>
 			</div>
 			<button
 				type="button"
 				class="viewport__handle"
-				aria-label="Drag to change preview width"
+				aria-label="Resize preview width"
 				@pointerdown="onDragStart"
 				@keydown="onHandleKey"
 			>
@@ -94,6 +94,22 @@ import { quoteCssFamily } from "../fonts";
 
 const PRESETS = [320, 375, 768, 1024, 1440] as const;
 const MIN_FRAME = 280;
+
+const plainText = (html: string) =>
+	html
+		.replace(/<[^>]+>/g, "")
+		.replace(/&mdash;/g, "—")
+		.replace(/&[^;]+;/g, " ")
+		.replace(/\s+/g, " ")
+		.trim();
+
+const clipHeading = (source: string, skip = 0) => {
+	const words = plainText(source).split(" ").filter(Boolean);
+	const take = 7;
+	let slice = words.slice(skip, skip + take);
+	if (slice.length < 3) slice = words.slice(0, take);
+	return slice.join(" ").replace(/^["“”']+/, "").replace(/[.,;:"”']+$/, "");
+};
 
 export default {
 	setup() {
@@ -137,6 +153,19 @@ export default {
 			if (!editing) {
 				article.value = cloneArticle(selectedArticle.value);
 			}
+		});
+
+		const sampleHeadings = computed(() => {
+			const paras: string[] = article.value.paragraphs ?? [];
+			const extras = Math.max(0, headingCount.value - 1);
+			const out: string[] = [];
+			for (let i = 0; i < extras; i++) {
+				const para =
+					paras[i + 1] ?? paras[paras.length - 1] ?? article.value.mainHeading;
+				const reuse = i + 1 >= paras.length;
+				out.push(clipHeading(para, reuse ? (i - paras.length + 2) * 6 : 0));
+			}
+			return out;
 		});
 
 		const announceCap = (message: string) => {
@@ -202,7 +231,7 @@ export default {
 				measureAvailable();
 				if (next > availableWidth.value) {
 					announceCap(
-						`${next}px is wider than the stage — showing ${availableWidth.value}px.`
+						`${next}px is wider than the preview area — showing ${availableWidth.value}px.`
 					);
 				} else {
 					capNotice.value = "";
@@ -298,6 +327,7 @@ export default {
 			article,
 			articles,
 			selectedArticle,
+			sampleHeadings,
 			h2Size,
 			h3Size,
 			h4Size,
