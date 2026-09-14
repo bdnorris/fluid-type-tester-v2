@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<label for="articles">Sample text</label>
 		<select name="articles" id="articles" v-model="selectedArticle">
 			<option
 				v-for="(article, index) in articles"
@@ -11,9 +12,15 @@
 		</select>
 		<input type="checkbox" value="edit-content" id="edit-content" v-model="contentEditable" />
 		<label for="edit-content">Edit Content</label>
+		<p v-if="contentEditable" class="text__edit-hint" role="status">
+			Editing the sample. Uncheck Edit Content to restore the original passage.
+		</p>
 		<div
 			class="text"
-			:style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --body-line-height: ${bodyLineHeight}; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px; --header-ratio: ${headerRatio}; --h2-size-min: ${h2Size[0]}px; --h2-size-fluid: ${h2Size[1]}vw; --h2-size-max: ${h2Size[2]}px; --h3-size-min: ${h3Size[0]}px; --h3-size-fluid: ${h3Size[1]}vw; --h3-size-max: ${h3Size[2]}px; --h4-size-min: ${h4Size[0]}px; --h4-size-fluid: ${h4Size[1]}vw; --h4-size-max: ${h4Size[2]}px; --h5-size-min: ${h5Size[0]}px; --h5-size-fluid: ${h5Size[1]}vw; --h5-size-max: ${h5Size[2]}px; --h6-size-min: ${h6Size[0]}px; --h6-size-fluid: ${h6Size[1]}vw; --h6-size-max: ${h6Size[2]}px; --header-line-height: ${headerLineHeight}; --body-font: ${bodyFont}; --header-font: ${headerFont}`"
+			:class="{ 'text--editing': contentEditable }"
+			role="article"
+			aria-label="Type preview"
+			:style="`--body-size-min: ${bodySizeMin}px; --body-size-fluid: ${bodySizeFluid}vw; --body-size-max: ${bodySizeMax}px; --body-line-height: ${bodyLineHeight}; --header-size-min: ${headerSizeMin}px; --header-size-fluid: ${headerSizeFluid}vw; --header-size-max: ${headerSizeMax}px; --header-ratio: ${headerRatio}; --h2-size-min: ${h2Size[0]}px; --h2-size-fluid: ${h2Size[1]}vw; --h2-size-max: ${h2Size[2]}px; --h3-size-min: ${h3Size[0]}px; --h3-size-fluid: ${h3Size[1]}vw; --h3-size-max: ${h3Size[2]}px; --h4-size-min: ${h4Size[0]}px; --h4-size-fluid: ${h4Size[1]}vw; --h4-size-max: ${h4Size[2]}px; --h5-size-min: ${h5Size[0]}px; --h5-size-fluid: ${h5Size[1]}vw; --h5-size-max: ${h5Size[2]}px; --h6-size-min: ${h6Size[0]}px; --h6-size-fluid: ${h6Size[1]}vw; --h6-size-max: ${h6Size[2]}px; --header-line-height: ${headerLineHeight}; --body-font: ${quotedBodyFont}; --header-font: ${quotedHeaderFont}`"
 			:contenteditable="contentEditable"
 		>
 			<h1>{{ article.mainHeading }}</h1>
@@ -31,6 +38,7 @@
 import { useStore } from "../../store";
 import { computed, ref, watch } from "vue";
 import texts from "../../texts.json";
+import { quoteCssFamily } from "../fonts";
 
 export default {
 	setup() {
@@ -48,12 +56,21 @@ export default {
 		const headerLineHeight = computed(() => store.state.headerLineHeight);
 		const headerFont = computed(() => store.state.headerFont);
 		const articles = JSON.parse(JSON.stringify(texts)).texts;
-		// console.log('articles', articles)
 		const selectedArticle = ref(articles[0].key);
-		const article = ref(articles[0]);
+		const article = ref(JSON.parse(JSON.stringify(articles[0])));
+		const contentEditable = ref(false);
+		const cloneArticle = (key: string) => {
+			const found = articles.find((item: { key: string }) => item.key === key);
+			return JSON.parse(JSON.stringify(found ?? articles[0]));
+		};
 		watch(selectedArticle, (newVal) => {
-			// console.log('newVal', newVal)
-			article.value = articles.find((article: { key: { [x: string]: object; }; }) => article.key === newVal);
+			article.value = cloneArticle(newVal);
+			contentEditable.value = false;
+		});
+		watch(contentEditable, (editing) => {
+			if (!editing) {
+				article.value = cloneArticle(selectedArticle.value);
+			}
 		});
 		return {
 			bodySizeMin,
@@ -76,7 +93,9 @@ export default {
 			h5Size: computed(() => store.getters.headingSize('h5')),
 			h6Size: computed(() => store.getters.headingSize('h6')),
 			headerLineHeight,
-			contentEditable: ref(false),
+			contentEditable,
+			quotedBodyFont: computed(() => quoteCssFamily(bodyFont.value)),
+			quotedHeaderFont: computed(() => quoteCssFamily(headerFont.value)),
 		};
 	},
 };
@@ -85,10 +104,18 @@ export default {
 <style>
 .text {
 	max-width: 69ch;
-	/* padding: 2em; */
+	min-width: 0;
+	overflow-wrap: anywhere;
 	line-height: var(--body-line-height);
 	font-family: var(--body-font);
-	/* padding-top: 6em; */
+}
+.text--editing {
+	outline: 2px solid var(--color-coral);
+	outline-offset: 0.25em;
+}
+.text__edit-hint {
+	font-size: 0.875rem;
+	margin: 0 0 0.75em 0;
 }
 .text h1, .text h2, .text h3, .text h4, .text h5, .text h6 {
 	line-height: var(--header-line-height);

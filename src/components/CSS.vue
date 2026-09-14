@@ -1,95 +1,198 @@
 <template>
-	<div class="code-wrap__buton-wrapper">
-		<button type="button" @click="toggleCodeWrap" id="close-popup">Show CSS</button>
+	<div class="code-wrap__button-wrapper">
+		<button type="button" ref="openButton" @click="openDialog">Show CSS</button>
 	</div>
-	<div class="code-wrap__wrapper" v-if="codeWrapVisible">
-		<div :class="{ 'code-wrap': true, 'code-wrap--visible': codeWrapVisible }">
-			<button type="button" @click="toggleCodeWrap" class="code-wrap__close">Close <span>&times;</span></button>
-			<div class="code">
-			<h2>Headline</h2>
-<pre>
-h1 {
-	font-size: clamp({{ headerSizeMin }}px, calc(1rem + {{ headerSizeFluid }}vw), {{ headerSizeMax }}px);
-	line-height: {{ headerLineHeight }};
-}
-</pre>
-<pre v-if="headingLevels > 1">
-h2 {
-	font-size: clamp({{ h2Size[0] }}px, calc(1rem + {{ h2Size[1] }}vw), {{ h2Size[2] }}px);
-	line-height: {{ headerLineHeight }};
-}
-</pre>
-<pre v-if="headingLevels > 2">
-h3 {
-	font-size: clamp({{ h3Size[0] }}px, calc(1rem + {{ h3Size[1] }}vw), {{ h3Size[2] }}px);
-	line-height: {{ headerLineHeight }};
-}
-</pre>
-<pre v-if="headingLevels > 3">
-h4 {
-	font-size: clamp({{ h4Size[0] }}px, calc(1rem + {{ h4Size[1] }}vw), {{ h4Size[2] }}px);
-	line-height: {{ headerLineHeight }};
-}
-</pre>
-<pre v-if="headingLevels > 4">
-h5 {
-	font-size: clamp({{ h5Size[0] }}px, calc(1rem + {{ h5Size[1] }}vw), {{ h5Size[2] }}px);
-	line-height: {{ headerLineHeight }};
-}
-</pre>
-<pre v-if="headingLevels > 5">
-h6 {
-	font-size: clamp({{ h6Size[0] }}px, calc(1rem + {{ h6Size[1] }}vw), {{ h6Size[2] }}px);
-	line-height: {{ headerLineHeight }};
-}
-</pre>
-		</div>
-		<div class="code">
-			<h2>Paragraphs</h2>
-			<pre>
-p {
-	font-size: clamp({{ bodySizeMin }}px, calc(1rem + {{ bodySizeFluid }}vw), {{ bodySizeMax }}px);
-	line-height: {{ bodyLineHeight }};
-}</pre>
+	<Teleport to="body">
+		<div class="code-wrap__wrapper" v-if="codeWrapVisible">
+			<div class="code-wrap__screen" @click="closeDialog"></div>
+			<div
+				class="code-wrap code-wrap--visible"
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="css-dialog-title"
+				ref="dialogEl"
+				tabindex="-1"
+				@keydown="onDialogKeydown"
+			>
+				<div class="code-wrap__toolbar">
+					<h2 id="css-dialog-title">Generated CSS</h2>
+					<button type="button" @click="copyCss">{{ copyLabel }}</button>
+					<button type="button" ref="closeButton" class="code-wrap__close" @click="closeDialog">
+						Close <span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<p v-if="copyStatus" class="code-wrap__status" role="status">{{ copyStatus }}</p>
+				<div class="code">
+					<h3>Headline</h3>
+<pre>{{ headingCss }}</pre>
+				</div>
+				<div class="code">
+					<h3>Paragraphs</h3>
+<pre>{{ paragraphCss }}</pre>
+				</div>
 			</div>
 		</div>
-		<div class="code-wrap__screen" aria-hidden="true" v-if="codeWrapVisible" @click="toggleCodeWrap"></div>
-	</div>
-
+	</Teleport>
 </template>
 
 <script lang="ts">
-import { computed, ref } from '@vue/runtime-core';
+import { computed, nextTick, onUnmounted, ref, watch } from "@vue/runtime-core";
 import { useStore } from "../../store";
+import { quoteCssFamily } from "../fonts";
+
 export default {
 	setup() {
 		const store = useStore();
 		const codeWrapVisible = ref(false);
-		return {
-			bodySizeMin: computed(() => store.state.bodySizeMin),
-			bodySizeFluid: computed(() => store.state.bodySizeFluid),
-			bodySizeMax: computed(() => store.state.bodySizeMax),
-			bodyLineHeight: computed(() => store.state.bodyLineHeight),
-			headerSizeMin: computed(() => store.state.headerSizeMin),
-			headerSizeFluid: computed(() => store.state.headerSizeFluid),
-			headerSizeMax: computed(() => store.state.headerSizeMax),
-			headerLineHeight: computed(() => store.state.headerLineHeight),
-			headingLevels: computed(() => store.state.headingLevels),
-			h2Size: computed(() => store.getters.headingSize('h2')),
-			h3Size: computed(() => store.getters.headingSize('h3')),
-			h4Size: computed(() => store.getters.headingSize('h4')),
-			h5Size: computed(() => store.getters.headingSize('h5')),
-			h6Size: computed(() => store.getters.headingSize('h6')),
-			codeWrapVisible,
-			toggleCodeWrap() {
-				codeWrapVisible.value = !codeWrapVisible.value;
-				let closeButton = document.getElementById('close-popup');
-				if (closeButton) {
-					closeButton.focus();
-				}
+		const copyStatus = ref("");
+		const copyLabel = ref("Copy CSS");
+		const dialogEl = ref<HTMLElement | null>(null);
+		const openButton = ref<HTMLButtonElement | null>(null);
+		const closeButton = ref<HTMLButtonElement | null>(null);
+		let copyTimer: ReturnType<typeof setTimeout> | undefined;
+
+		const headerFont = computed(() => quoteCssFamily(store.state.headerFont));
+		const bodyFont = computed(() => quoteCssFamily(store.state.bodyFont));
+		const bodySizeMin = computed(() => store.state.bodySizeMin);
+		const bodySizeFluid = computed(() => store.state.bodySizeFluid);
+		const bodySizeMax = computed(() => store.state.bodySizeMax);
+		const bodyLineHeight = computed(() => store.state.bodyLineHeight);
+		const headerSizeMin = computed(() => store.state.headerSizeMin);
+		const headerSizeFluid = computed(() => store.state.headerSizeFluid);
+		const headerSizeMax = computed(() => store.state.headerSizeMax);
+		const headerLineHeight = computed(() => store.state.headerLineHeight);
+		const headingLevels = computed(() => store.state.headingLevels);
+		const h2Size = computed(() => store.getters.headingSize("h2"));
+		const h3Size = computed(() => store.getters.headingSize("h3"));
+		const h4Size = computed(() => store.getters.headingSize("h4"));
+		const h5Size = computed(() => store.getters.headingSize("h5"));
+		const h6Size = computed(() => store.getters.headingSize("h6"));
+
+		const headingBlock = (selector: string, min: number, fluid: number, max: number) =>
+			`${selector} {
+	font-family: ${headerFont.value};
+	font-size: clamp(${min}px, calc(1rem + ${fluid}vw), ${max}px);
+	line-height: ${headerLineHeight.value};
+}`;
+
+		const headingCss = computed(() => {
+			const blocks = [
+				headingBlock("h1", headerSizeMin.value, headerSizeFluid.value, headerSizeMax.value),
+			];
+			if (headingLevels.value > 1) {
+				blocks.push(headingBlock("h2", h2Size.value[0], h2Size.value[1], h2Size.value[2]));
 			}
-		}
-	}
+			if (headingLevels.value > 2) {
+				blocks.push(headingBlock("h3", h3Size.value[0], h3Size.value[1], h3Size.value[2]));
+			}
+			if (headingLevels.value > 3) {
+				blocks.push(headingBlock("h4", h4Size.value[0], h4Size.value[1], h4Size.value[2]));
+			}
+			if (headingLevels.value > 4) {
+				blocks.push(headingBlock("h5", h5Size.value[0], h5Size.value[1], h5Size.value[2]));
+			}
+			if (headingLevels.value > 5) {
+				blocks.push(headingBlock("h6", h6Size.value[0], h6Size.value[1], h6Size.value[2]));
+			}
+			return blocks.join("\n\n");
+		});
+
+		const paragraphCss = computed(
+			() => `p {
+	font-family: ${bodyFont.value};
+	font-size: clamp(${bodySizeMin.value}px, calc(1rem + ${bodySizeFluid.value}vw), ${bodySizeMax.value}px);
+	line-height: ${bodyLineHeight.value};
+}`
+		);
+
+		const cssText = computed(() => `${headingCss.value}\n\n${paragraphCss.value}\n`);
+
+		const focusable = () => {
+			const root = dialogEl.value;
+			if (!root) return [];
+			return Array.from(
+				root.querySelectorAll<HTMLElement>(
+					'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+				)
+			).filter((el) => !el.hasAttribute("disabled") && el.tabIndex !== -1);
+		};
+
+		const openDialog = () => {
+			codeWrapVisible.value = true;
+			copyStatus.value = "";
+			copyLabel.value = "Copy CSS";
+			nextTick(() => {
+				closeButton.value?.focus();
+			});
+		};
+
+		const closeDialog = () => {
+			codeWrapVisible.value = false;
+			nextTick(() => {
+				openButton.value?.focus();
+			});
+		};
+
+		const onDialogKeydown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				event.preventDefault();
+				closeDialog();
+				return;
+			}
+			if (event.key !== "Tab") return;
+			const nodes = focusable();
+			if (nodes.length === 0) return;
+			const first = nodes[0];
+			const last = nodes[nodes.length - 1];
+			const active = document.activeElement as HTMLElement | null;
+			if (event.shiftKey && active === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && active === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		};
+
+		const copyCss = async () => {
+			try {
+				await navigator.clipboard.writeText(cssText.value);
+				copyStatus.value = "Copied to clipboard.";
+				copyLabel.value = "Copied";
+			} catch {
+				copyStatus.value = "Couldn’t copy automatically — select the CSS below and copy it yourself.";
+				copyLabel.value = "Copy CSS";
+			}
+			if (copyTimer) clearTimeout(copyTimer);
+			copyTimer = setTimeout(() => {
+				copyLabel.value = "Copy CSS";
+			}, 2500);
+		};
+
+		watch(codeWrapVisible, (open) => {
+			document.body.style.overflow = open ? "hidden" : "";
+		});
+
+		onUnmounted(() => {
+			document.body.style.overflow = "";
+			if (copyTimer) clearTimeout(copyTimer);
+		});
+
+		return {
+			codeWrapVisible,
+			headingCss,
+			paragraphCss,
+			copyStatus,
+			copyLabel,
+			dialogEl,
+			openButton,
+			closeButton,
+			openDialog,
+			closeDialog,
+			onDialogKeydown,
+			copyCss,
+		};
+	},
 };
 </script>
 
@@ -100,12 +203,15 @@ export default {
 	align-items: center;
 	position: fixed;
 	inset: 0;
+	z-index: 100;
+	padding: 1em;
 }
 .code-wrap {
-	transform: scale(0);
-	transition: transform 0.3s ease-in-out;
-	border: 1px solid var(--color-white);
-	/* border-top: 0; */
+	position: relative;
+	max-width: min(42rem, 100%);
+	max-height: min(90vh, 100%);
+	overflow: auto;
+	min-width: 0;
 	padding: 1em;
 	z-index: 101;
 }
@@ -119,18 +225,36 @@ export default {
 	z-index: 100;
 }
 .code-wrap--visible {
-	transform: scale(1);
+	transform: none;
 }
-.code-wrap--toggle {
-	position: absolute;
-	bottom: calc(-3em + 2px);
-	left: 3em;
-	padding: 0 1em;
-	height: 3em;
-	border-top: 0;
-	border-radius: 0 0 var(--border-radius) var(--border-radius);
+.code-wrap__toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5em 1em;
+	margin-bottom: 0.75em;
 }
-.code-wrap__buton-wrapper {
+.code-wrap__toolbar h2 {
+	flex: 1 1 auto;
+	margin: 0;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+.code-wrap__toolbar button {
+	margin: 0;
+}
+.code-wrap__status {
+	font-size: 0.875rem;
+	margin: 0 0 1em 0;
+	overflow-wrap: anywhere;
+}
+.code-wrap__button-wrapper {
 	padding: 2em 0;
+}
+.code pre {
+	overflow-x: auto;
+	max-width: 100%;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
 }
 </style>

@@ -1,0 +1,15 @@
+{
+  "buildPath": "comp",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-09-14T20:58:48.795Z",
+        "reason": "Incumbent chrome face; replacing it is /impeccable typeset, out of scope for this harden pass."
+      }
+    ]
+  }
+}

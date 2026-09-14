@@ -35,25 +35,41 @@ export const store = createStore<State>({
   },
 	mutations: {
 		setBodySizeMin(state, size) {
-			state.bodySizeMin = size;
+			const n = Number(size);
+			state.bodySizeMin = n;
+			if (n > state.bodySizeMax) {
+				state.bodySizeMax = n;
+			}
 		},
 		setBodySizeFluid(state, size) {
-			state.bodySizeFluid = size;
+			state.bodySizeFluid = Number(size);
 		},
 		setBodySizeMax(state, size) {
-			state.bodySizeMax = size;
+			const n = Number(size);
+			state.bodySizeMax = n;
+			if (n < state.bodySizeMin) {
+				state.bodySizeMin = n;
+			}
 		},
 		setBodyLineHeight(state, lineHeight) {
-			state.bodyLineHeight = lineHeight;
+			state.bodyLineHeight = Number(lineHeight);
 		},
 		setHeaderSizeMin(state, size) {
-			state.headerSizeMin = size;
+			const n = Number(size);
+			state.headerSizeMin = n;
+			if (n > state.headerSizeMax) {
+				state.headerSizeMax = n;
+			}
 		},
 		setHeaderSizeFluid(state, size) {
-			state.headerSizeFluid = size;
+			state.headerSizeFluid = Number(size);
 		},
 		setHeaderSizeMax(state, size) {
-			state.headerSizeMax = size;
+			const n = Number(size);
+			state.headerSizeMax = n;
+			if (n < state.headerSizeMin) {
+				state.headerSizeMin = n;
+			}
 		},
 		addHeadingLevel(state) {
 			if (state.headingLevels < 6) {
