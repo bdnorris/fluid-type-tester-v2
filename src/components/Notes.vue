@@ -60,9 +60,24 @@ export default {
 </script>
 
 <style>
-footer > div {
-	padding: 2em;
-	max-width: 76ch;
-	/* margin: 0 auto; */
+.lab__notes > div {
+	padding: var(--space-5) max(var(--space-6), env(safe-area-inset-right)) max(var(--space-5), env(safe-area-inset-bottom)) max(var(--space-6), env(safe-area-inset-left));
+	max-width: 69ch;
+}
+.lab__notes h2 {
+	margin: 0 0 var(--space-3);
+	font-size: 1rem;
+}
+.lab__notes h3 {
+	margin: var(--space-5) 0 var(--space-3);
+	font-size: 0.875rem;
+}
+.lab__notes p,
+.lab__notes li {
+	font-size: 0.875rem;
+}
+.lab__notes ul {
+	margin: 0;
+	padding-inline-start: 1.25em;
 }
 </style>

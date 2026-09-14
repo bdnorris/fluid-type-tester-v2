@@ -21,7 +21,14 @@
   --color-coral: #f17474;
   --color-macaroni: #fdb67c;
 
-  
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+
   --border-radius: 0.333em;
   
   color: var(--color-white);
@@ -30,15 +37,18 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
   line-height: 1.4;
 }
 
+#app {
+  width: 100%;
+  min-height: 100dvh;
+}
+
 main {
-  margin-bottom: 3em;
+  margin-bottom: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -93,6 +103,15 @@ select:focus {
   background-color: var(--color-munsel);
   color: var(--color-white);
 }
+* {
+  scrollbar-color: var(--color-lapis) transparent;
+}
+.skip {
+  background-color: var(--color-lapis);
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: var(--border-radius);
+}
 select option {
   font-weight: normal;
 }
@@ -126,6 +145,18 @@ input[type='checkbox'] + label {
   /* z-index: 1; */
 }
 
+@media (pointer: coarse) {
+  button,
+  select,
+  input[type="text"],
+  input[type="search"] {
+    min-height: 44px;
+  }
+  input[type="range"] {
+    min-height: 44px;
+  }
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -142,7 +173,14 @@ input[type='checkbox'] + label {
   }
   .controls__panel {
     background-color: var(--color-alice);
-    border: 1px solid var(--color-lapis);
+  }
+  .lab__chrome,
+  .lab__notes {
+    background-color: var(--color-alice);
+    color: var(--color-gunmetal);
+  }
+  .lab__prompt {
+    color: var(--color-lapis);
   }
   .code-wrap {
     background-color: var(--color-alice);
@@ -208,7 +246,14 @@ input[type='checkbox'] + label {
   }
   .controls__panel {
     background-color: var(--color-gunmetal);
-    border: 1px solid var(--color-lapis);
+  }
+  .lab__chrome,
+  .lab__notes {
+    background-color: var(--color-gunmetal);
+    color: var(--color-white);
+  }
+  .lab__prompt {
+    color: var(--color-blue);
   }
   .code-wrap {
     background-color: var(--color-gunmetal);

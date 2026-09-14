@@ -2,22 +2,144 @@
 	<div class="controls">
 		<link v-if="bodyCssUrl" :href="bodyCssUrl" rel="stylesheet" />
 		<link v-if="headerCssUrl" :href="headerCssUrl" rel="stylesheet" />
-		<div
-			id="controls-panel"
-			:class="{ 'controls__panel': true, 'controls__panel--open': controlsVisible }"
-			:aria-expanded="controlsVisible"
-		>
-			<button
-				type="button"
-				class="toggle controls__toggle"
-				:aria-expanded="controlsVisible"
-				aria-controls="controls-panel"
-				@click="toggleControls"
-			>
-				Controls <span aria-hidden="true" v-if="controlsVisible">&times;</span><span aria-hidden="true" v-else>+</span>
-			</button>
-			<p class="controls__status" :class="statusClass" role="status">{{ fontStatusMessage }}</p>
+		<div id="controls-panel" class="controls__panel">
 			<p v-if="clampNotice" class="controls__status controls__status--notice" role="status">{{ clampNotice }}</p>
+
+			<fieldset class="controls__section">
+				<legend>Header</legend>
+				<div class="clamp-trio">
+					<div>
+						<div class="controls__pair">
+							<label for="headerSizeMin">Minimum</label>
+							<span>{{ headerSizeMin }}px</span>
+						</div>
+						<input type="range" min="1" max="100" step="1" id="headerSizeMin" v-model.number="headerSizeMin" />
+					</div>
+					<div>
+						<div class="controls__pair">
+							<label for="headerSizeFluid">Fluid</label>
+							<span>{{ headerSizeFluid }}vw</span>
+						</div>
+						<input type="range" min="1" max="20" step="0.1" id="headerSizeFluid" v-model.number="headerSizeFluid" />
+					</div>
+					<div>
+						<div class="controls__pair">
+							<label for="headerSizeMax">Maximum</label>
+							<span>{{ headerSizeMax }}px</span>
+						</div>
+						<input type="range" min="1" max="100" step="1" id="headerSizeMax" v-model.number="headerSizeMax" />
+					</div>
+				</div>
+				<div class="controls__row">
+					<div class="controls__pair">
+						<label for="headerLineHeight">Line height</label>
+						<span>{{ headerLineHeight }}</span>
+					</div>
+					<input type="range" min="0.1" max="3" step="0.1" id="headerLineHeight" v-model.number="headerLineHeight" />
+				</div>
+			</fieldset>
+
+			<fieldset class="controls__section">
+				<legend>Body</legend>
+				<div class="clamp-trio">
+					<div>
+						<div class="controls__pair">
+							<label for="bodySizeMin">Minimum</label>
+							<span>{{ bodySizeMin }}px</span>
+						</div>
+						<input type="range" min="1" max="100" step="1" id="bodySizeMin" v-model.number="bodySizeMin" />
+					</div>
+					<div>
+						<div class="controls__pair">
+							<label for="bodySizeFluid">Fluid</label>
+							<span>{{ bodySizeFluid }}vw</span>
+						</div>
+						<input type="range" min="1" max="20" step="0.1" id="bodySizeFluid" v-model.number="bodySizeFluid" />
+					</div>
+					<div>
+						<div class="controls__pair">
+							<label for="bodySizeMax">Maximum</label>
+							<span>{{ bodySizeMax }}px</span>
+						</div>
+						<input type="range" min="1" max="100" step="1" id="bodySizeMax" v-model.number="bodySizeMax" />
+					</div>
+				</div>
+				<div class="controls__row">
+					<div class="controls__pair">
+						<label for="bodyLineHeight">Line height</label>
+						<span>{{ bodyLineHeight }}</span>
+					</div>
+					<input type="range" min="0.1" max="3" step="0.1" id="bodyLineHeight" v-model.number="bodyLineHeight" />
+				</div>
+			</fieldset>
+
+			<fieldset class="controls__section">
+				<legend>Typefaces</legend>
+				<label for="fontFilter">Filter fonts</label>
+				<input
+					type="search"
+					id="fontFilter"
+					v-model="fontQuery"
+					autocomplete="off"
+					placeholder="Type to narrow the list"
+				/>
+				<label for="headerFont">Header font</label>
+				<select id="headerFont" name="headerFont" v-model="selectedHeaderFont" :disabled="visibleFonts.length === 0">
+					<option v-for="(font, index) in visibleFonts" :value="font.family" :key="'h-' + index">{{ font.family }}</option>
+				</select>
+				<label for="headerCustomFont">Header custom font</label>
+				<input
+					type="text"
+					id="headerCustomFont"
+					maxlength="80"
+					autocomplete="off"
+					spellcheck="false"
+					placeholder="Family name on this machine or Google Fonts"
+					v-model="headerCustomFont"
+				/>
+				<label for="bodyFont">Body font</label>
+				<select id="bodyFont" name="bodyFont" v-model="selectedBodyFont" :disabled="visibleFonts.length === 0">
+					<option v-for="(font, index) in visibleFonts" :value="font.family" :key="'b-' + index">{{ font.family }}</option>
+				</select>
+				<label for="bodyCustomFont">Body custom font</label>
+				<input
+					type="text"
+					id="bodyCustomFont"
+					maxlength="80"
+					autocomplete="off"
+					spellcheck="false"
+					placeholder="Family name on this machine or Google Fonts"
+					v-model="bodyCustomFont"
+				/>
+			</fieldset>
+
+			<fieldset class="controls__section">
+				<legend>Scale</legend>
+				<div class="controls__actions">
+					<button type="button" @click="addHeading" :disabled="headingsMaxed">
+						Add heading level
+					</button>
+					<button type="button" @click="removeHeading" v-if="headingLevels > 1">
+						Remove heading level
+					</button>
+				</div>
+				<div v-if="headingLevels > 1" class="controls__row">
+					<div class="controls__pair">
+						<label for="headerRatio">Heading ratio</label>
+						<span>{{ headerRatio }}</span>
+					</div>
+					<input
+						type="range"
+						min="1.001"
+						max="2"
+						step="0.001"
+						id="headerRatio"
+						v-model.number="headerRatio"
+					/>
+				</div>
+			</fieldset>
+
+			<p class="controls__status" :class="statusClass" role="status">{{ fontStatusMessage }}</p>
 			<button
 				v-if="fontsStatus === 'error'"
 				type="button"
@@ -26,197 +148,12 @@
 			>
 				Retry catalog
 			</button>
-			<label for="fontFilter">Filter fonts</label>
-			<input
-				type="search"
-				id="fontFilter"
-				v-model="fontQuery"
-				autocomplete="off"
-				placeholder="Type to narrow the list"
-			/>
-			<fieldset :class="{'collapse': collapsed.includes('header')}" :aria-expanded="!collapsed.includes('header')">
-				<legend>Header Text</legend>
-				<button type="button" class="button--toggle" @click="collapseFieldset('header')">
-					Header Text<span aria-hidden="true" v-if="collapsed.includes('header')">+</span><span aria-hidden="true" v-else>&minus;</span>
-				</button>
-				<div class="controls__slider">
-					<div>
-						<label for="headerSizeMin">Header Size Minimum</label>
-						<span>{{ headerSizeMin }}px</span>
-						<input
-						type="range"
-						min="1"
-						max="100"
-						step="1"
-						class="slider"
-						id="headerSizeMin"
-						v-model.number="headerSizeMin"
-						/>
-					</div>
-					<div>
-						<label for="headerSizeFluid">Header Size Fluid</label>
-						<span>{{ headerSizeFluid }}vw</span>
-						<input
-						type="range"
-						min="1"
-						max="20"
-						step="0.1"
-						class="slider"
-						id="headerSizeFluid"
-						v-model.number="headerSizeFluid"
-						/>
-					</div>
-					<div>
-						<label for="headerSizeMax">Header Size Maximum</label>
-						<span>{{ headerSizeMax }}px</span>
-						<input
-						type="range"
-						min="1"
-						max="100"
-						step="1"
-						class="slider"
-						id="headerSizeMax"
-						v-model.number="headerSizeMax"
-						/>
-					</div>
-					<div>
-						<label for="headerLineHeight">Header Line Height</label>
-						<span>{{ headerLineHeight }}</span>
-						<input
-						type="range"
-						min="0.1"
-						max="3"
-						step="0.1"
-						class="slider"
-						id="headerLineHeight"
-						v-model.number="headerLineHeight"
-						/>
-					</div>
-					<label for="headerFont">Header Font</label>
-					<select id="headerFont" name="headerFont" v-model="selectedHeaderFont" :disabled="visibleFonts.length === 0">
-						<option v-for="(font, index) in visibleFonts" :value="font.family" :key="'h-' + index">{{ font.family }}</option>
-					</select>
-					<label for="headerCustomFont">
-						Header Custom Font <span class="controls__hint">(if not listed above)</span>
-					</label>
-					<input
-						type="text"
-						id="headerCustomFont"
-						maxlength="80"
-						autocomplete="off"
-						spellcheck="false"
-						placeholder="Family name on this machine or Google Fonts"
-						v-model="headerCustomFont"
-					/>
-				</div>
-			</fieldset>
-			<fieldset :class="{'collapse': collapsed.includes('body')}" :aria-expanded="!collapsed.includes('body')">
-				<legend>Body Text</legend>
-				<button type="button" class="button--toggle" @click="collapseFieldset('body')">
-					Body Text<span aria-hidden="true" v-if="collapsed.includes('body')">+</span><span aria-hidden="true" v-else>&minus;</span>
-				</button>
-				<div class="controls__slider">
-					<div>
-						<label for="bodySizeMin">Body Size Minimum</label>
-						<span>{{ bodySizeMin }}px</span>
-						<input
-							type="range"
-							min="1"
-							max="100"
-							step="1"
-							class="slider"
-							id="bodySizeMin"
-							v-model.number="bodySizeMin"
-						/>
-					</div>
-					<div>
-						<label for="bodySizeFluid">Body Size Fluid</label>
-						<span>{{ bodySizeFluid }}vw</span>
-						<input
-							type="range"
-							min="1"
-							max="20"
-							step="0.1"
-							class="slider"
-							id="bodySizeFluid"
-							v-model.number="bodySizeFluid"
-						/>
-					</div>
-					<div>
-						<label for="bodySizeMax">Body Size Maximum</label>
-						<span>{{ bodySizeMax }}px</span>
-						<input
-							type="range"
-							min="1"
-							max="100"
-							step="1"
-							class="slider"
-							id="bodySizeMax"
-							v-model.number="bodySizeMax"
-						/>
-					</div>
-					<div>
-						<label for="bodyLineHeight">Body Line Height</label>
-						<span>{{ bodyLineHeight }}</span>
-						<input
-							type="range"
-							min="0.1"
-							max="3"
-							step="0.1"
-							class="slider"
-							id="bodyLineHeight"
-							v-model.number="bodyLineHeight"
-						/>
-					</div>
-					<label for="bodyFont">Body Font</label>
-					<select id="bodyFont" name="bodyFont" v-model="selectedBodyFont" :disabled="visibleFonts.length === 0">
-						<option v-for="(font, index) in visibleFonts" :value="font.family" :key="'b-' + index">{{ font.family }}</option>
-					</select>
-					<label for="bodyCustomFont">
-						Body Custom Font <span class="controls__hint">(if not listed above)</span>
-					</label>
-					<input
-						type="text"
-						id="bodyCustomFont"
-						maxlength="80"
-						autocomplete="off"
-						spellcheck="false"
-						placeholder="Family name on this machine or Google Fonts"
-						v-model="bodyCustomFont"
-					/>
-				</div>
-			</fieldset>
-			<button type="button" @click="addHeading" :disabled="headingsMaxed">
-				Add Another Heading Level
-			</button>
-			<button type="button" @click="removeHeading" v-if="headingLevels > 1">
-				Remove a Heading Level
-			</button>
-			<fieldset v-if="headingLevels > 1" :class="{'collapse': collapsed.includes('headerRatio')}" :aria-expanded="!collapsed.includes('headerRatio')">
-				<legend>Header Ratio</legend>
-				<button type="button" class="button--toggle" @click="collapseFieldset('headerRatio')">
-					Header Ratio<span aria-hidden="true" v-if="collapsed.includes('headerRatio')">+</span><span aria-hidden="true" v-else>&minus;</span>
-				</button>
-				<div class="controls__slider">
-					<label for="headerRatio">Header Ratio</label>
-					<span>{{ headerRatio }}</span>
-					<input
-						type="range"
-						min="1.001"
-						max="2"
-						step="0.001"
-						class="slider"
-						id="headerRatio"
-						v-model.number="headerRatio"
-					/>
-				</div>
-			</fieldset>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { computed, onMounted, onUnmounted, Ref, ref, watch } from "@vue/runtime-core";
+import { computed, onMounted, onUnmounted, ref, watch } from "@vue/runtime-core";
 import { useStore } from "../../store";
 import {
 	FALLBACK_FONTS,
@@ -329,14 +266,6 @@ export default {
 			list = ensureFamily(list, selectedBodyFont.value);
 			return list;
 		});
-		const collapsed: Ref<string[]> = ref(["header", "body"]);
-		const collapseFieldset = function (fieldset: string) {
-			if (collapsed.value.includes(fieldset)) {
-				collapsed.value.splice(collapsed.value.indexOf(fieldset), 1);
-			} else {
-				collapsed.value.push(fieldset);
-			}
-		};
 		const activeHeaderFamily = computed(() =>
 			headerCustomFont.value.trim() || selectedHeaderFont.value
 		);
@@ -441,10 +370,6 @@ export default {
 			catalogAbort?.abort();
 			if (clampNoticeTimer) clearTimeout(clampNoticeTimer);
 		});
-		const controlsVisible = ref(false);
-		const toggleControls = () => {
-			controlsVisible.value = !controlsVisible.value;
-		};
 		return {
 			bodySizeMin,
 			bodySizeFluid,
@@ -454,7 +379,6 @@ export default {
 			headerSizeMin,
 			headerSizeFluid,
 			headerSizeMax,
-			headings: computed(() => store.state.headingLevels),
 			addHeading,
 			removeHeading,
 			headingLevels,
@@ -468,10 +392,6 @@ export default {
 			selectedHeaderFont,
 			bodyCssUrl,
 			headerCssUrl,
-			controlsVisible,
-			toggleControls,
-			collapsed,
-			collapseFieldset,
 			fontsStatus,
 			fontStatusMessage,
 			statusClass,
@@ -483,54 +403,103 @@ export default {
 </script>
 
 <style>
-.controls__slider {
-	display: flex;
-	flex-direction: column;
+.controls {
 	min-width: 0;
-}
-.controls__slider > div {
-	margin-bottom: 1em;
-	min-width: 0;
-}
-.controls__slider > div > span {
-	font-weight: 500;
-	font-style: italic;
-	margin-left: 1ch;
-	display: inline-block;
+	height: 100%;
 }
 .controls__panel {
 	display: flex;
 	flex-direction: column;
-	position: relative;
-	padding: 1em;
-	transform: translateX(calc(-100% + 1em));
-	transition: transform 0.3s ease-in-out;
-	border-left: 0;
-	border-top: 0;
+	gap: var(--space-5);
+	padding: var(--space-4) var(--space-4) max(var(--space-6), env(safe-area-inset-bottom)) max(var(--space-4), env(safe-area-inset-left));
+	min-width: 0;
+	min-height: 100%;
+	box-sizing: border-box;
+}
+.controls__section {
+	margin: 0;
+	padding: 0;
+	border: 0;
 	min-width: 0;
 }
-.controls__panel--open {
-	transform: translateX(0);
+.controls__section legend {
+	position: static;
+	float: none;
+	width: 100%;
+	padding: 0;
+	margin: 0 0 var(--space-3);
+	font-size: 0.75rem;
+	font-weight: 650;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	line-height: 1.3;
 }
-.controls__toggle {
-	position: fixed;
-	top: 6em;
-	right: calc(-7em + 2px);
-	height: 3em;
-	transform: rotate(90deg);
-	border-bottom: 0;
-	border-radius: var(--border-radius) var(--border-radius) 0 0;
-	padding: 0 1em;
+.clamp-trio,
+.controls__row {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3);
+	min-width: 0;
 }
-.controls__toggle span {
-	font-size: 1.5em;
-	position: relative;
-	top: 0.125em;
+.clamp-trio {
+	gap: var(--space-2);
+}
+.clamp-trio > div,
+.controls__row {
+	min-width: 0;
+}
+.clamp-trio label,
+.controls__row label,
+.controls__section > label {
+	font-size: 0.8125rem;
+	margin: 0;
+}
+.controls__pair {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--space-2);
+}
+.controls__pair span {
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+}
+.clamp-trio input[type="range"],
+.controls__row input[type="range"] {
+	width: 100%;
+	margin: 0;
+}
+.controls__section > label {
+	margin-block-start: var(--space-3);
+}
+.controls__section > label:first-of-type {
+	margin-block-start: 0;
+}
+.controls__section input[type="text"],
+.controls__section input[type="search"],
+.controls__section select {
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	margin-bottom: 0;
+}
+.controls__section select {
+	margin-block-end: 0;
+}
+.controls__actions {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+}
+.controls__actions button {
+	margin: 0;
+	padding: var(--space-3) var(--space-4);
 }
 .controls__status {
-	font-size: 0.875rem;
+	font-size: 0.8125rem;
 	line-height: 1.4;
-	margin: 0 0 0.75em 0;
+	margin: 0;
 	overflow-wrap: anywhere;
 }
 .controls__status--error {
@@ -539,65 +508,9 @@ export default {
 .controls__status--notice {
 	color: var(--color-munsel);
 }
-.controls__hint {
-	font-weight: 400;
-}
 .controls__retry {
 	align-self: flex-start;
-}
-.controls__panel > input[type="search"] {
-	width: 100%;
-	max-width: 100%;
-	min-width: 0;
-	box-sizing: border-box;
-	margin-bottom: 1em;
-}
-.controls__slider input[type="text"],
-.controls__slider input[type="search"] {
-	max-width: 100%;
-	min-width: 0;
-	overflow-wrap: anywhere;
-}
-
-fieldset {
-	margin-bottom: 1em;
-	box-shadow: none;
-	position: relative;
-	padding-top: 2em;
-	margin-bottom: 2em;
-	margin-top: 1em;
-	min-width: 0;
-}
-fieldset.collapse > div {
-	display: none;
-}
-legend {
-	position: absolute;
-	top: -9999px;
-	left: -9999px;
-	pointer-events: none;
-	visibility: hidden;
-	opacity: 0;
-}
-label {
-	font-size: 0.875rem;
-}
-
-.button--toggle {
-	position: absolute;
-	top: -0.666em;
-	right: 0;
-	padding: 0 0.25em 0 0.5em;
-	color: var(--default-light);
-	font-size: 1.5em;
-	margin-bottom: 0.5em;
-	font-weight: 500;
-	text-transform: none;
-	letter-spacing: 0;
-	max-width: 100%;
-	overflow-wrap: anywhere;
-}
-.button--toggle > span {
-	padding-left: 0.5em;
+	margin: 0;
+	padding: var(--space-3) var(--space-4);
 }
 </style>

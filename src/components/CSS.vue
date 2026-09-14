@@ -204,12 +204,12 @@ export default {
 	position: fixed;
 	inset: 0;
 	z-index: 100;
-	padding: 1em;
+	padding: max(1em, env(safe-area-inset-top)) max(1em, env(safe-area-inset-right)) max(1em, env(safe-area-inset-bottom)) max(1em, env(safe-area-inset-left));
 }
 .code-wrap {
 	position: relative;
 	max-width: min(42rem, 100%);
-	max-height: min(90vh, 100%);
+	max-height: min(90dvh, 100%);
 	overflow: auto;
 	min-width: 0;
 	padding: 1em;
@@ -242,6 +242,7 @@ export default {
 }
 .code-wrap__toolbar button {
 	margin: 0;
+	min-height: 44px;
 }
 .code-wrap__status {
 	font-size: 0.875rem;
@@ -249,7 +250,11 @@ export default {
 	overflow-wrap: anywhere;
 }
 .code-wrap__button-wrapper {
-	padding: 2em 0;
+	padding: 0;
+}
+.code-wrap__button-wrapper button {
+	margin: 0;
+	padding: var(--space-3) var(--space-4);
 }
 .code pre {
 	overflow-x: auto;
