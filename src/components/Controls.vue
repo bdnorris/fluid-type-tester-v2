@@ -437,15 +437,47 @@ export default {
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	line-height: 1.3;
-	cursor: pointer;
-	min-height: 44px;
-	display: flex;
-	align-items: center;
 }
 .controls__section legend {
-	cursor: default;
-	min-height: 0;
 	display: block;
+}
+.controls__disclosure summary {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-3);
+	min-height: 44px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	cursor: pointer;
+	border-block-end: 1px solid var(--color-lapis);
+}
+.controls__disclosure summary::-webkit-details-marker,
+.controls__disclosure summary::marker {
+	display: none;
+	content: "";
+}
+.controls__disclosure summary::after {
+	content: "";
+	flex: 0 0 auto;
+	width: 0.4rem;
+	height: 0.4rem;
+	margin-inline-end: 0.15rem;
+	border-inline-end: 2px solid currentColor;
+	border-block-end: 2px solid currentColor;
+	transform: rotate(45deg);
+	transition: transform 160ms ease-out;
+}
+.controls__disclosure[open] summary {
+	margin-bottom: var(--space-3);
+}
+.controls__disclosure[open] summary::after {
+	transform: rotate(225deg);
+}
+.controls__disclosure summary:hover,
+.controls__disclosure summary:focus-visible {
+	color: var(--color-munsel);
 }
 .clamp-trio,
 .controls__row {

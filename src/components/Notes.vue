@@ -70,6 +70,28 @@ export default {
 	min-height: 44px;
 	display: flex;
 	align-items: center;
+	justify-content: flex-start;
+	gap: var(--space-3);
+	width: fit-content;
+	list-style: none;
+}
+.lab__notes summary::-webkit-details-marker,
+.lab__notes summary::marker {
+	display: none;
+	content: "";
+}
+.lab__notes summary::after {
+	content: "";
+	flex: 0 0 auto;
+	width: 0.4rem;
+	height: 0.4rem;
+	border-inline-end: 2px solid currentColor;
+	border-block-end: 2px solid currentColor;
+	transform: rotate(45deg);
+	transition: transform 160ms ease-out;
+}
+.lab__notes details[open] summary::after {
+	transform: rotate(225deg);
 }
 .lab__notes p,
 .lab__notes li {
