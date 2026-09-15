@@ -376,6 +376,8 @@ export default {
 .stage__sample label {
 	display: block;
 	margin-bottom: var(--space-2);
+	font-size: var(--text-label);
+	font-weight: var(--weight-medium);
 }
 .stage__sample select {
 	margin: 0;
@@ -385,7 +387,8 @@ export default {
 	align-items: center;
 	gap: var(--space-2);
 	min-height: 44px;
-	font-size: 0.875rem;
+	font-size: var(--text-label);
+	font-weight: var(--weight-medium);
 }
 .stage__edit input {
 	width: 1.25rem;
@@ -403,12 +406,12 @@ export default {
 }
 .viewport-bar__readout {
 	margin: 0;
-	font-size: 0.8125rem;
-	font-variant-numeric: tabular-nums;
-	line-height: 1.3;
+	font-size: var(--text-label);
+	font-variant-numeric: tabular-nums lining-nums;
+	line-height: 1.35;
 }
 .viewport-bar__width {
-	font-weight: 650;
+	font-weight: var(--weight-semibold);
 }
 .viewport-bar__sep {
 	margin-inline: 0.4em;
@@ -424,14 +427,15 @@ export default {
 	padding: var(--space-2) var(--space-3);
 	min-height: 44px;
 	letter-spacing: 0.06em;
-	font-size: 0.75rem;
+	font-size: var(--text-meta);
 }
 .viewport-bar__presets button[aria-pressed="true"] {
 	box-shadow: inset 0 0 0 2px var(--color-coral);
 }
 .viewport-bar__note {
 	margin: 0 0 var(--space-3);
-	font-size: 0.8125rem;
+	font-size: var(--text-label);
+	line-height: 1.45;
 	color: var(--color-munsel);
 }
 .viewport-shell {
@@ -522,13 +526,16 @@ export default {
 	overflow-wrap: anywhere;
 	line-height: var(--body-line-height);
 	font-family: var(--body-font);
+	letter-spacing: normal;
+	font-weight: var(--weight-regular);
 }
 .text--editing {
 	outline: 2px solid var(--color-coral);
 	outline-offset: 0.25em;
 }
 .text__edit-hint {
-	font-size: 0.875rem;
+	font-size: var(--text-prompt);
+	line-height: 1.45;
 	margin: 0 0 0.75em 0;
 }
 .text h1, .text h2, .text h3, .text h4, .text h5, .text h6 {

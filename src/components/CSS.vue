@@ -258,7 +258,11 @@ export default {
 	margin: 0;
 	min-width: 0;
 	overflow-wrap: anywhere;
-	font-size: 1.125rem;
+	font-size: var(--text-dialog);
+	font-weight: var(--weight-semibold);
+	letter-spacing: -0.01em;
+	line-height: 1.3;
+	text-transform: none;
 }
 .code-wrap__close {
 	background-color: transparent;
@@ -266,7 +270,7 @@ export default {
 	color: inherit;
 }
 .code-wrap__status {
-	font-size: 0.875rem;
+	font-size: var(--text-prompt);
 	margin: 0;
 	flex: 1 1 100%;
 	overflow-wrap: anywhere;
@@ -278,5 +282,10 @@ export default {
 	margin: 0;
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
+	font-family: var(--font-mono);
+	font-size: var(--text-label);
+	font-weight: var(--weight-regular);
+	line-height: 1.45;
+	font-variant-ligatures: none;
 }
 </style>

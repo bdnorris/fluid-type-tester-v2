@@ -70,15 +70,16 @@ export default {
 }
 .lab__title {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  font-size: var(--text-identity);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.015em;
   line-height: 1.2;
 }
 .lab__prompt {
   margin: var(--space-2) 0 0;
-  font-size: 0.875rem;
-  line-height: 1.4;
+  font-size: var(--text-prompt);
+  font-weight: var(--weight-regular);
+  line-height: 1.45;
   max-width: 46ch;
 }
 .lab__workspace {
@@ -172,6 +173,17 @@ export default {
     min-height: 0;
     border-block-end: 0;
     padding: var(--space-4);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .lab__title {
+    letter-spacing: -0.008em;
+  }
+  .lab__prompt {
+    font-weight: var(--weight-medium);
+    letter-spacing: 0.01em;
+    line-height: 1.5;
   }
 }
 </style>

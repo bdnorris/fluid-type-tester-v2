@@ -432,9 +432,9 @@ export default {
 	width: 100%;
 	padding: 0;
 	margin: 0 0 var(--space-3);
-	font-size: 0.75rem;
-	font-weight: 650;
-	letter-spacing: 0.08em;
+	font-size: var(--text-meta);
+	font-weight: var(--weight-semibold);
+	letter-spacing: 0.06em;
 	text-transform: uppercase;
 	line-height: 1.3;
 }
@@ -496,7 +496,8 @@ export default {
 .clamp-trio label,
 .controls__row label,
 .controls__section > label {
-	font-size: 0.8125rem;
+	font-size: var(--text-label);
+	font-weight: var(--weight-medium);
 	margin: 0;
 }
 .controls__pair {
@@ -506,8 +507,8 @@ export default {
 	gap: var(--space-2);
 }
 .controls__pair span {
-	font-weight: 500;
-	font-variant-numeric: tabular-nums;
+	font-weight: var(--weight-medium);
+	font-variant-numeric: tabular-nums lining-nums;
 }
 .clamp-trio input[type="range"],
 .controls__row input[type="range"] {
@@ -542,8 +543,8 @@ export default {
 	padding: var(--space-3) var(--space-4);
 }
 .controls__status {
-	font-size: 0.8125rem;
-	line-height: 1.4;
+	font-size: var(--text-label);
+	line-height: 1.45;
 	margin: 0;
 	overflow-wrap: anywhere;
 }
@@ -554,13 +555,15 @@ export default {
 	color: var(--color-munsel);
 }
 .controls__hint {
-	font-size: 0.8125rem;
-	line-height: 1.4;
+	font-size: var(--text-label);
+	line-height: 1.45;
 	margin: 0;
 }
 .controls__hint code {
 	font-size: 0.875em;
-	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-family: var(--font-mono);
+	font-weight: var(--weight-medium);
+	font-variant-ligatures: none;
 }
 .controls__retry {
 	align-self: flex-start;

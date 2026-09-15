@@ -61,11 +61,11 @@ export default {
 <style>
 .lab__notes .notes {
 	padding: var(--space-4) max(var(--space-6), env(safe-area-inset-right)) max(var(--space-4), env(safe-area-inset-bottom)) max(var(--space-6), env(safe-area-inset-left));
-	max-width: 69ch;
+	max-width: 65ch;
 }
 .lab__notes summary {
-	font-size: 0.875rem;
-	font-weight: 650;
+	font-size: var(--text-prompt);
+	font-weight: var(--weight-semibold);
 	cursor: pointer;
 	min-height: 44px;
 	display: flex;
@@ -95,7 +95,8 @@ export default {
 }
 .lab__notes p,
 .lab__notes li {
-	font-size: 0.875rem;
+	font-size: var(--text-prose);
+	line-height: 1.5;
 }
 .lab__notes p {
 	margin: var(--space-3) 0 var(--space-4);
@@ -103,5 +104,16 @@ export default {
 .lab__notes ul {
 	margin: 0;
 	padding-inline-start: 1.25em;
+}
+.lab__notes a {
+	text-underline-offset: 0.15em;
+}
+
+@media (prefers-color-scheme: dark) {
+	.lab__notes p,
+	.lab__notes li {
+		letter-spacing: 0.01em;
+		line-height: 1.55;
+	}
 }
 </style>
