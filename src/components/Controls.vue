@@ -77,6 +77,7 @@
 			<details class="controls__section controls__disclosure">
 				<summary>Typefaces</summary>
 				<p class="controls__hint">Pick from the list, or type a family that’s installed or on Google Fonts.</p>
+				<p v-if="fallbackHint" class="controls__status">{{ fallbackHint }}</p>
 				<label for="fontFilter">Filter fonts</label>
 				<input
 					type="search"
@@ -142,7 +143,7 @@
 				</div>
 			</details>
 
-			<p v-if="fontStatusMessage" class="controls__status" :class="statusClass" role="status">{{ fontStatusMessage }}</p>
+			<p v-if="catalogAlert" class="controls__status" :class="statusClass" role="status">{{ catalogAlert }}</p>
 			<button
 				v-if="fontsStatus === 'error'"
 				type="button"
@@ -281,14 +282,17 @@ export default {
 			if (family === activeBodyFamily.value) return "";
 			return fontStylesheetUrl(family);
 		});
-		const fontStatusMessage = computed(() => {
+		const catalogAlert = computed(() => {
 			if (fontsStatus.value === "loading") return "Loading Google Fonts catalog…";
-			if (fontsStatus.value === "ready") return "";
 			if (fontsStatus.value === "error") {
 				return "Couldn’t load Google Fonts. Using a built-in list. Check the network, then retry.";
 			}
+			return "";
+		});
+		const fallbackHint = computed(() => {
+			if (fontsStatus.value !== "fallback") return "";
 			if (!gfApiKey.value) {
-				return "Using a built-in font list. Add VITE_GF_API_KEY for the full catalog.";
+				return "Using a built-in list. Add VITE_GF_API_KEY for the full catalog.";
 			}
 			return "Using a built-in font list.";
 		});
@@ -396,7 +400,8 @@ export default {
 			bodyCssUrl,
 			headerCssUrl,
 			fontsStatus,
-			fontStatusMessage,
+			catalogAlert,
+			fallbackHint,
 			statusClass,
 			loadCatalog,
 			clampNotice,
@@ -469,8 +474,13 @@ export default {
 	transform: rotate(45deg);
 	transition: transform 160ms ease-out;
 }
+.controls__disclosure[open] {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3);
+}
 .controls__disclosure[open] summary {
-	margin-bottom: var(--space-3);
+	margin-bottom: 0;
 }
 .controls__disclosure[open] summary::after {
 	transform: rotate(225deg);
@@ -518,6 +528,7 @@ export default {
 .controls__section > label {
 	margin-block-start: var(--space-3);
 }
+.controls__disclosure > label,
 .controls__section > label:first-of-type {
 	margin-block-start: 0;
 }

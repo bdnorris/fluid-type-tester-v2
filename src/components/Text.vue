@@ -415,7 +415,7 @@ export default {
 }
 .viewport-bar__sep {
 	margin-inline: 0.4em;
-	opacity: 0.55;
+	color: var(--color-lapis);
 }
 .viewport-bar__presets {
 	display: flex;
@@ -485,6 +485,7 @@ export default {
 	border-radius: 2px;
 	background: var(--color-lapis);
 }
+.viewport__handle:hover .viewport__handle-mark,
 .viewport__handle:focus-visible .viewport__handle-mark {
 	background: var(--color-coral);
 }

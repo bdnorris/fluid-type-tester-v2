@@ -1,16 +1,15 @@
 <template>
 	<div class="code-wrap__chrome">
-		<button type="button" class="code-wrap__copy" ref="openButton" @click="copyCss">
+		<button type="button" class="code-wrap__copy" ref="openButton" aria-live="polite" @click="copyCss">
 			{{ copyLabel }}
 		</button>
 		<button type="button" class="code-wrap__view" @click="openDialog">View CSS</button>
-		<p v-if="copyStatus && !codeWrapVisible" class="code-wrap__status" role="status">{{ copyStatus }}</p>
 	</div>
 	<Teleport to="body">
 		<div class="code-wrap__wrapper" v-if="codeWrapVisible">
 			<div class="code-wrap__screen" @click="closeDialog"></div>
 			<div
-				class="code-wrap code-wrap--visible"
+				class="code-wrap"
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby="css-dialog-title"
@@ -212,10 +211,6 @@ export default {
 	min-height: 44px;
 	padding: var(--space-3) var(--space-4);
 }
-.code-wrap__view:hover,
-.code-wrap__close:hover {
-	border-color: var(--color-munsel);
-}
 .code-wrap__wrapper {
 	display: flex;
 	justify-content: center;
@@ -242,9 +237,6 @@ export default {
 	width: 100%;
 	height: 100%;
 	z-index: 100;
-}
-.code-wrap--visible {
-	transform: none;
 }
 .code-wrap__toolbar {
 	display: flex;

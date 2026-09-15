@@ -10,6 +10,7 @@
 				<a
 					href="https://m2.material.io/design/typography/the-type-system.html#type-scale"
 					target="_blank"
+					rel="noopener noreferrer"
 					>Material Design Type Scale</a
 				>
 			</li>
@@ -17,6 +18,7 @@
 				<a
 					href="https://type-scale.com/"
 					target="_blank"
+					rel="noopener noreferrer"
 					>Type Scale (by Jeremy Church)</a
 				>
 			</li>
@@ -24,6 +26,7 @@
 				<a
 					href="https://www.modularscale.com/"
 					target="_blank"
+					rel="noopener noreferrer"
 					>Modular Scale (by Scott Kellum and Tim Brown.)</a
 					>
 			</li>
@@ -31,13 +34,15 @@
 				<a
 					href="https://modern-fluid-typography.vercel.app/"
 					target="_blank"
+					rel="noopener noreferrer"
 					>Modern fluid typography editor (by Adrian Bece)</a
-					>
+				>
 			</li>
 			<li>
 				<a
 					href="https://css-tricks.com/snippets/css/fluid-typography/"
 					target="_blank"
+					rel="noopener noreferrer"
 					>Fluid Typography (CSS Tricks)</a
 				>
 			</li>
@@ -45,6 +50,7 @@
 				<a
 					href="https://www.smashingmagazine.com/2022/01/modern-fluid-typography-css-clamp/"
 					target="_blank"
+					rel="noopener noreferrer"
 					>Fluid Typography with Clamp (Smashing Magazine)</a
 				>
 			</li>
